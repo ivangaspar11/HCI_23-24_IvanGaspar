@@ -20,7 +20,7 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link href="/pages/solo-traveler-corner"className="text-white hover:text-blue-200">Solo Traveler's Information
+            <Link href="/pages/solo-traveler-corner"className="text-white hover:text-blue-200">Solo Traveler's Corner
             </Link>
           </li>
           <li>
