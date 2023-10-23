@@ -5,7 +5,7 @@ export default function SoloTravelerCorner(){
     return (
         <div>
         <Navbar/>  
-        <h3>Solo Traveler's Corner Page</h3>
+        <h3>Solo Traveler Corner Page</h3>
     </div>
     )
 }
