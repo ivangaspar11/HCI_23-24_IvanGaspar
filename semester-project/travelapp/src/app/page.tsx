@@ -4,9 +4,8 @@ import Navbar from './components/navbar'
 
 export default function Home() {
   return (
- <div>
-  <Navbar/>
-  <h2>HOME PAGE</h2>
-  </div>
+    <main className="flex min-h-screen flex-col items-center justify-between p-10">
+    <h1 className="text-3xl font-bold">Home Page</h1>
+  </main>
   )
 }

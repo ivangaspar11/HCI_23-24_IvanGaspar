@@ -3,9 +3,8 @@ import React from "react"
 
 export default function CulturalExploration(){
     return (
-        <div>
-        <Navbar/>
-            <h3>Adventure Travel Page</h3>
-        </div>
+        <main className="flex min-h-screen flex-col items-center justify-between p-10">
+      <h1 className="text-3xl font-bold">Cultural Exploration Page</h1>
+    </main>
     )
 }
