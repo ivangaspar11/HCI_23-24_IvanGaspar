@@ -5,7 +5,7 @@ import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaEnvelope } from 'reac
 const Footer = () => {
   return (
     <footer className="bg-white text-black py-8">
-      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
+      <div className="container mx-auto my-4 px-5 flex flex-col md:flex-row justify-between items-center">
         {/* Social Media Icons */}
         <div className="flex space-x-4">
           <a href="#" target="_blank" rel="noopener noreferrer">

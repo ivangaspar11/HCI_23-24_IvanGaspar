@@ -9,15 +9,6 @@ import DestinationsSection from './_components/DestinationsSection';
 import Footer from './components/Footer';
 
 
-const pages = {
-  Home: "/",
-  Adventure: "/adventure-travel",
-  Family: "/family-travel",
-  CulturalExploration: "/cultural-exploration",
-  Support: "/support",
-  Contact: "/contact"
-};
-
 const inter = Inter({ subsets: ['latin'] })
 
 

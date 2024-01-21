@@ -1,17 +1,6 @@
-// import React from "react"
-// import Navbar from "@/app/components/navbar"
-
-// export default function AdventureTravel(){
-//     return (
-//         <main className="flex min-h-screen flex-col items-center justify-between p-10">
-//         <h1 className="text-3xl font-bold">Adventure Travel Page</h1>
-//       </main>
-//     )
-// }
-
-
 
 import Link from "next/link";
+import Header from "./Header";
 
 export interface AdventureDestination {
   albumId: number;
@@ -32,9 +21,9 @@ export default async function AdventureTravel() {
   const photos = await getPhotos();
   const first10Photos = photos.slice(0, 6);
   return (
-<main className="flex flex-col items-center min-h-screen max-w-5xl m-auto p-10">
-  <h1 className="text-3xl font-bold p-10">Adventure Destinations Page</h1>
-  <div className="grid grid-cols-3 gap-20">
+  <div>
+    <Header/>
+  <div className="grid grid-cols-3 gap-20 mt-10">
     {first10Photos.map((photo) => (
       <Link key={photo.id} href={`/pages/adventure-travel/${photo.id}`}>
         <div className="p-2">
@@ -46,8 +35,6 @@ export default async function AdventureTravel() {
       </Link>
     ))}
   </div>
-</main>
-
+  </div>
 );
 }
-

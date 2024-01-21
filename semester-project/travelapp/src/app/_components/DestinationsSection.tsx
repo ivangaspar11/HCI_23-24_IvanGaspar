@@ -23,7 +23,7 @@ const DestinastionsSection: React.FC<SectionProps> = ({ destinations }) => {
               <img src={destination.imageUrl} alt={destination.name} className="w-full h-64 object-cover mb-4" />
               <div className="text-center">
                 <h3 className="text-lg font-semibold mb-2">{destination.name}</h3>
-                <button className="bg-gray-500 text-white px-4 py-2 rounded-full hover:bg-gray-700"> Book Now</button>
+                <button className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-700"> Book Now</button>
 
               </div>
             </div>

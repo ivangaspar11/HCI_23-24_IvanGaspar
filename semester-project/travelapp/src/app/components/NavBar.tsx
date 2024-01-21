@@ -14,9 +14,9 @@ export type Page = {
 
 const pages: Page[] = [
   { href: "/", title: "Home" },
-  { href: "/adventureTravel", title: "Adventure Travel" },
-  { href: "/cultural-exploration", title: "Cultural Exploration" },
+  { href: "/adventure-travel", title: "Adventure Travel" },
   { href: "/family-travel", title: "Family Travel" },
+  { href: "/blog", title: "Blog" },
   { href: "/support", title: "Support" },
   { href: "/contact", title: "Contact" },
 ];

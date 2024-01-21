@@ -7,6 +7,26 @@ html {
   font-family: 'Raleway', sans-serif;
 }
 
-.custom-img {
+.home-img {
   background-image: url('https://images.unsplash.com/photo-1498354178607-a79df2916198?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+
+.adventure-img {
+  background-image: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+
+.family-img {
+  background-image: url('https://images.unsplash.com/photo-1518658761661-a3c568ee7b64?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+
+.blog-img {
+  background-image: url('https://images.unsplash.com/photo-1452421822248-d4c2b47f0c81?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+
+.support-img {
+  background-image: url('https://images.unsplash.com/photo-1563596129-ec3f2b093643?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
+}
+
+.contact-img {
+  background-image: url('https://images.unsplash.com/photo-1475691058852-37b5d9b6a878?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
 }
