@@ -42,6 +42,7 @@ const companyNumbersData = {
 
 export default function Home() {
   const [showSections, setShowSections] = useState(false);
+
   return (
     <div>
       <HeroSection/> 

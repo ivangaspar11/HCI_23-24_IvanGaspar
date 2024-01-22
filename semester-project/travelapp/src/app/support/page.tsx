@@ -104,7 +104,7 @@ const SupportPage: React.FC = () => {
 
       
  
-<section className="py-12 text-center">
+<section className="py-12 text-center bg-gray-100">
   <h2 className="text-2xl  mb-6 inline-block border-b-4 border-blue-500 pb-2">Insurance Information</h2>
 
   <div className="container mx-auto flex flex-col md:flex-row items-center">

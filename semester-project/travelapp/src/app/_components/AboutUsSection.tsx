@@ -5,7 +5,7 @@ import React from 'react';
 
 const AboutUsSection: React.FC = () => {
   return (
-    <section className="py-12 bg-gray-100">
+    <section className="py-12 ">
       <div className="container mx-auto text-center">
         <h2 className="text-4xl font-bold mb-6">Discover Your Journey With Us</h2>
         <p className="text-gray-700 text-lg leading-relaxed mb-8">

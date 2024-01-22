@@ -7,6 +7,7 @@ import { cn } from "../lib/utils";
 import { Page } from "./NavBar";
 import { useState, useEffect } from "react";
 import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
+import { useRouter } from "next/router";
 
 const MainNav = ({ pages }: { pages: Page[] }) => {
   const [nav, setNav] = useState(false);
@@ -32,6 +33,7 @@ const MainNav = ({ pages }: { pages: Page[] }) => {
 
   const pathname = usePathname();
 
+
   return (
     <div style={{ backgroundColor: `${color}` }} className='fixed left-0 top-0 w-full z-10 ease-in duration-300'>
       <div className='max-w-[1240px] m-auto flex justify-between items-center p-4 text-white'> 
@@ -46,15 +48,12 @@ const MainNav = ({ pages }: { pages: Page[] }) => {
         </Link>
         <ul style={{ color: `${textColor}` }} className='hidden sm:flex'>
           {pages.map(({ href, title }) => (
-            <li className='p-4' key={href}>
+            <li className={cn("p-4", {"border-b-4 border-blue-500":pathname === href, "inline-block": true})} key={href}>
               <Link href={href}>
                 <span
                   className={cn(
-                    "uppercase whitespace-nowrap font-roboto-condensed text-base px-5 py-3 rounded-sm text-brand-purple-900 hover:bg-brand-purple-200",
-                    {
-                      "bg-brand-purple-700 text-brand-purple-100 pointer-events-none":
-                        pathname === href,
-                    }
+                    "uppercase whitespace-nowrap font-roboto-condensed text-base px-5 py-3 "
+         
                   )}
                 >
                   {title}
@@ -88,7 +87,7 @@ const MainNav = ({ pages }: { pages: Page[] }) => {
                     className={cn(
                       "uppercase whitespace-nowrap font-roboto-condensed text-base px-5 py-3 rounded-sm text-brand-purple-900 hover:bg-brand-purple-200",
                       {
-                        "bg-brand-purple-700 text-brand-purple-100 pointer-events-none":
+                        "inline-block border-b-4 border-blue-500":
                           pathname === href,
                       }
                     )}

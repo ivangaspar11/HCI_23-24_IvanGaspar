@@ -15,7 +15,7 @@ type CompanyNumbersSectionProps = {
 
 const CompanyNumbersSection: React.FC<CompanyNumbersSectionProps> = ({ companyNumbers }) => {
     return (
-      <section className="py-16 bg-gray-200">
+      <section className="py-16 bg-gray-100">
         <div className="container mx-auto text-center">
           <h2 className="text-4xl font-bold mb-8 md:mb-12">Our Company in Numbers</h2>
           <div className="flex flex-col md:flex-row items-center justify-center gap-8">
