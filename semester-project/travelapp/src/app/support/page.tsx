@@ -20,9 +20,9 @@ const FAQSection = () => {
   };
 
   const faqData = [
-    { id: 1, question: 'How do I book a trip?', answer: 'You can book a trip by following these steps...' },
-    { id: 2, question: 'Is my payment secure?', answer: 'Yes, we use secure payment methods...' },
-    { id: 3, question: 'What if I need to cancel my reservation?', answer: 'You can cancel your reservation by...' },
+    { id: 1, question: "How do I book a trip?", answer: "You can book a trip by following these steps..." },
+    { id: 2, question: "Is my payment secure?", answer: "Yes, we use secure payment methods..." },
+    { id: 3, question: "What if I need to cancel my reservation?", answer: "You can cancel your reservation by..." },
   ];
 
   return (
@@ -34,31 +34,31 @@ const FAQSection = () => {
             expanded={expandedItems.includes(item.id)}
             onChange={() => toggleExpandItem(item.id)}
             style={{
-              width: '60%',
-              margin: 'auto', // Center the Expansion Panel
-              backgroundColor: '#0080ff',
-              borderRadius: '10px',
-              borderColor: '#e0e0e0',
-              borderWidth: '2px',
+              width: "60%",
+              margin: "auto", // Center the Expansion Panel
+              backgroundColor: "#0080ff",
+              borderRadius: "10px",
+              borderColor: "#e0e0e0",
+              borderWidth: "2px",
             }}
           >
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
               style={{
-                backgroundColor: '#0080ff',
-                borderRadius: '10px 10px 0 0',
-                borderColor: '#e0e0e0',
-                borderWidth: '2px',
+                backgroundColor: "#0080ff",
+                borderRadius: "10px 10px 0 0",
+                borderColor: "#e0e0e0",
+                borderWidth: "2px",
               }}
             >
               <h3 className="text-xl font-semibold">{item.question}</h3>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails
               style={{
-                backgroundColor: '#f5f5f5',
-                borderRadius: '0 0 10px 10px',
-                borderColor: '#e0e0e0',
-                borderWidth: '2px',
+                backgroundColor: "#f5f5f5",
+                borderRadius: "0 0 10px 10px",
+                borderColor: "#e0e0e0",
+                borderWidth: "2px",
               }}
             >
               <div className="text-gray-700">{item.answer}</div>

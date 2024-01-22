@@ -1,11 +1,8 @@
 "use client";
-import Image from 'next/image'
-import Link from 'next/link'
-import Navbar from './components/NavBar'
-import HeroSection from './_components/HeroSection'
+
+import HeroSection from "./_components/HeroSection"
 import { useState } from 'react';
 import DestinationsSection from './_components/DestinationsSection';
-import Footer from './components/Footer';
 import AboutUsSection from './_components/AboutUsSection';
 import NumberSection from './_components/NumberSection';
 
