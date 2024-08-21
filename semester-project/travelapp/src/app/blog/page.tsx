@@ -1,4 +1,3 @@
-
 import {
   Card,
   CardContent,
@@ -8,24 +7,12 @@ import {
   CardTitle,
 } from "@/app/components/UI/card";
 import Link from "next/link";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import Image from "next/image";
 import { cn } from "@/app/lib/utils";
 // import { products, categories } from "./productList";
 import contentfulService, { TypePostListItem } from "@/app/lib/contentful";
-
-// export interface HeroImageProps {
-//   productName: string;
-//   image?: string;
-//   className?: string;
-// }
-
-// export const HeroImage = ({
-//   image,
-//   productName,
-//   className,
-// }: HeroImageProps) => {
-//   if (!image) return null;
+import Header from "./Header";
 
 //   return (
 //     <div className={cn("relative w-96 h-60", className)}>
@@ -41,7 +28,7 @@ import contentfulService, { TypePostListItem } from "@/app/lib/contentful";
 //   );
 // };
 
-const ProductCard: FC<TypePostListItem> = ({
+const PostCard: FC<TypePostListItem> = ({
   title,
   content,
   coverImage,
@@ -57,7 +44,7 @@ const ProductCard: FC<TypePostListItem> = ({
       <CardDescription>{excerpt}</CardDescription>
     </CardHeader>
     <CardContent>
-      <Link href={`posts/${id}`}>
+      <Link href={`blog/${id}`}>
         <div className="relative w-96 h-60">
           <Image
             src={coverImage}
@@ -87,20 +74,20 @@ const Blog: FC<SearchParams> = async ({ }) => {
   const posts = await contentfulService.getAllPosts();
 
   return (
-    <main className="container flex flex-col items-center gap-10">
-      <h1 className="font-roboto-condensed text-6xl font-extrabold text-brand-purple-900 my-4">
-        Posts
-      </h1>
+  <div >
+    <Header/>
+    <div className="container flex flex-col items-center gap-10">
       <ul className="grid grid-cols-2 gap-8">
         {posts.map((post) => {
           return (
             <li key={post.id}>
-              <ProductCard {...post} />
+              <PostCard {...post} />
             </li>
           );
         })}
       </ul>
-    </main>
+    </div>
+    </div>
   );
 };
 

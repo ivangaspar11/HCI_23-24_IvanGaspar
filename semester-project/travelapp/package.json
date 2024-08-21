@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@contentful/rich-text-react-renderer": "^15.19.0",
+    "@contentful/rich-text-react-renderer": "^15.22.9",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
