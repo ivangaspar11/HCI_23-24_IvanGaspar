@@ -7,26 +7,11 @@ import {
   CardTitle,
 } from "@/app/components/UI/card";
 import Link from "next/link";
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import Image from "next/image";
 import { cn } from "@/app/lib/utils";
-// import { products, categories } from "./productList";
 import contentfulService, { TypePostListItem } from "@/app/lib/contentful";
 import Header from "./Header";
-
-//   return (
-//     <div className={cn("relative w-96 h-60", className)}>
-//       <Image
-//         src={image}
-//         fill
-//         style={{ objectFit: "cover" }}
-//         className="rounded-md hover:opacity-70"
-//         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw"
-//         alt={productName || "product"}
-//       />
-//     </div>
-//   );
-// };
 
 const PostCard: FC<TypePostListItem> = ({
   title,
@@ -36,16 +21,15 @@ const PostCard: FC<TypePostListItem> = ({
   author,
   excerpt,
   slug,
-
 }) => (
-  <Card className="w-fit">
+  <Card className="w-full md:w-96">
     <CardHeader>
       <CardTitle className="text-brand-purple-800">{title}</CardTitle>
       <CardDescription>{excerpt}</CardDescription>
     </CardHeader>
     <CardContent>
       <Link href={`blog/${id}`}>
-        <div className="relative w-96 h-60">
+        <div className="relative w-full h-60">
           <Image
             src={coverImage}
             fill
@@ -57,36 +41,41 @@ const PostCard: FC<TypePostListItem> = ({
         </div>
       </Link>
     </CardContent>
-    {/* <CardFooter>
-      {categories?.map((category) => (
-        <Badge variant={category?.label as BadgeProps["variant"]} key={id}>
-          {category?.label}
-        </Badge>
-      ))}
-    </CardFooter> */}
+    <CardFooter className="flex items-center space-x-4">
+      <div className="relative w-10 h-10 rounded-full overflow-hidden">
+        <Image
+          src={author.picture.url}
+          fill
+          style={{ objectFit: "cover" }}
+          alt={author.name}
+        />
+      </div>
+      <div>
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-200">{author.name}</p>
+      </div>
+    </CardFooter>
   </Card>
 );
-export type SearchParams = {
-    searchParams: Record<string, string | string[] | undefined>;
-  };
 
-const Blog: FC<SearchParams> = async ({ }) => {
+export type SearchParams = {
+  searchParams: Record<string, string | string[] | undefined>;
+};
+
+const Blog: FC<SearchParams> = async ({}) => {
   const posts = await contentfulService.getAllPosts();
 
   return (
-  <div >
-    <Header/>
-    <div className="container flex flex-col items-center gap-10">
-      <ul className="grid grid-cols-2 gap-8">
-        {posts.map((post) => {
-          return (
+    <div>
+      <Header />
+      <div className="container flex flex-col items-center gap-10 py-10">
+        <ul className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {posts.map((post) => (
             <li key={post.id}>
               <PostCard {...post} />
             </li>
-          );
-        })}
-      </ul>
-    </div>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

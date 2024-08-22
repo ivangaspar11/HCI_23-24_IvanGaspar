@@ -58,12 +58,126 @@ const gqlAllPostsQuery = `query PostList {
     }
   }`;
 
+  const gqlAdventureTravelQuery = ` query GetAdventureTravelDestinations {
+  travelDestinationCollection(where: { category: "Adventure" }) {
+    items {
+      sys {
+        id
+      }
+      title
+      description {
+        json
+      }
+      photo {
+        url
+        title
+        description
+        width
+        height
+      }
+      departureDate
+      returnDate
+      price
+      category
+    }
+  }
+} `;
+
+const gqlFamilyTravelQuery = ` query GetFamilyTravelDestinations {
+  travelDestinationCollection(where: { category: "Family" }) {
+    items {
+      sys {
+        id
+      }
+      title
+      description {
+        json
+      }
+      photo {
+        url
+        title
+        description
+        width
+        height
+      }
+      departureDate
+      returnDate
+      price
+      category
+    }
+  }
+} `;
+  
+const gqlTravelDestinationByIdQuery = `query GetTravelDestionationById($travelId: String!) {
+  travelDestination(id: $travelId) {
+    sys {
+      id
+    }
+    title
+    description {
+      json
+    }
+    photo {
+      url
+      title
+      description
+      width
+      height
+    }
+    departureDate
+    returnDate
+    price
+  }
+}`;
+
+interface travelDestinationCollectionResponse{
+  travelDestinationCollection:{
+    items : DestinationItem[];
+  }
+}
 
   interface PostCollectionResponse{
     postCollection:{
         items: PostItem[];
     };
   }
+
+interface DestinationItem {
+    sys: {
+      id: string;  // The unique identifier for this item
+    };
+    title: string;  // The title of the destination
+    description: {
+      json: any;  // The description in Rich Text format, could be more specific with a Contentful type if necessary
+    };
+    photo: {
+      url: string;  // The URL to the photo of the destination
+      title: string;  // The title of the photo
+      description: string;  // The description of the photo
+      width: number;  // The width of the photo
+      height: number;  // The height of the photo
+    };
+    departureDate: string;  // The departure date as a string, might be a Date object instead
+    returnDate: string;  // The return date as a string, might be a Date object instead
+    price: number;  // The price of the destination as a decimal number
+    category: string;  // The category assigned to this destination (e.g., "AdventureTravel")
+  }
+
+  export interface DestinationListItem {      
+    id: string;  // The unique identifier for this item
+    title: string;  // The title of the destination
+    description: {
+        json: any;  // The description in Rich Text format, could be more specific with a Contentful type if necessary
+      };
+     photo: {
+        url: string;  // The URL to the photo of the destinatio      
+      };
+      departureDate: string;  // The departure date as a string, might be a Date object instead
+      returnDate: string;  // The return date as a string, might be a Date object instead
+      price: number;  // The price of the destination as a decimal number
+      category: string;  // The category assigned to this destination (e.g., "AdventureTravel")
+    }
+  
 
   interface PostItem{
     sys:{
@@ -89,15 +203,20 @@ const gqlAllPostsQuery = `query PostList {
     }
   }
 
-  export interface TypePostListItem{
+  export interface TypePostListItem {
+    id: string;
     title: string;
     slug: string;
-    excerpt:string;
-    id: string;
-    content: string;
+    excerpt: string;
+    content: any;  // Same as above, update according to the content structure
     coverImage: string;
-    author: string;
-  }
+    author: {
+        name: string;
+        picture: {
+            url: string;
+        };
+    };
+}
   const baseUrl = `https://graphql.contentful.com/content/v1/spaces/zqhs6d43ltbb/environments/master`;
 
   const getAllPosts = async (): Promise<TypePostListItem[]> => {
@@ -125,7 +244,7 @@ const gqlAllPostsQuery = `query PostList {
           content: item.content,
           coverImage:item.coverImage.url,
           slug: item.slug,
-          author:item.author.name,
+          author:item.author,
           excerpt:item.excerpt,
         }));
       
