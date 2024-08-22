@@ -23,6 +23,8 @@ interface Image {
     author: Author;
   }
   
+
+  
   // Represents the response structure returned by the GraphQL query
   interface DetailPostResponse {
     post: {

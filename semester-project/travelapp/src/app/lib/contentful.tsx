@@ -83,8 +83,8 @@ const gqlAllPostsQuery = `query PostList {
   }
 } `;
 
-const gqlFamilyTravelQuery = ` query GetFamilyTravelDestinations {
-  travelDestinationCollection(where: { category: "Family" }) {
+const gqlDestinationsByCategoryQuery = `query GetDestinationsByCategory($category: String!) {
+  travelDestinationCollection(where: { category: $category }) {
     items {
       sys {
         id
@@ -106,7 +106,8 @@ const gqlFamilyTravelQuery = ` query GetFamilyTravelDestinations {
       category
     }
   }
-} `;
+}`;
+
   
 const gqlTravelDestinationByIdQuery = `query GetTravelDestionationById($travelId: String!) {
   travelDestination(id: $travelId) {
@@ -144,38 +145,34 @@ interface travelDestinationCollectionResponse{
 
 interface DestinationItem {
     sys: {
-      id: string;  // The unique identifier for this item
+      id: string;  
     };
-    title: string;  // The title of the destination
-    description: {
-      json: any;  // The description in Rich Text format, could be more specific with a Contentful type if necessary
-    };
+    title: string; 
+    description: any;
     photo: {
-      url: string;  // The URL to the photo of the destination
-      title: string;  // The title of the photo
-      description: string;  // The description of the photo
-      width: number;  // The width of the photo
-      height: number;  // The height of the photo
+      url: string; 
+      title: string;  
+      description: string;  
+      width: number;  
+      height: number; 
     };
-    departureDate: string;  // The departure date as a string, might be a Date object instead
-    returnDate: string;  // The return date as a string, might be a Date object instead
-    price: number;  // The price of the destination as a decimal number
-    category: string;  // The category assigned to this destination (e.g., "AdventureTravel")
+    departureDate: string;
+    returnDate: string; 
+    price: number; 
+    category: string;  
   }
 
   export interface DestinationListItem {      
-    id: string;  // The unique identifier for this item
-    title: string;  // The title of the destination
-    description: {
-        json: any;  // The description in Rich Text format, could be more specific with a Contentful type if necessary
-      };
+    id: string;  
+    title: string;  
+    description: any;
      photo: {
-        url: string;  // The URL to the photo of the destinatio      
+        url: string;       
       };
-      departureDate: string;  // The departure date as a string, might be a Date object instead
-      returnDate: string;  // The return date as a string, might be a Date object instead
-      price: number;  // The price of the destination as a decimal number
-      category: string;  // The category assigned to this destination (e.g., "AdventureTravel")
+      departureDate: string;  
+      returnDate: string;  
+      price: number; 
+      category: string; 
     }
   
 
@@ -216,6 +213,10 @@ interface DestinationItem {
             url: string;
         };
     };
+}
+
+interface DetailDestinationResponse {
+  destination: DestinationItem;
 }
   const baseUrl = `https://graphql.contentful.com/content/v1/spaces/zqhs6d43ltbb/environments/master`;
 
@@ -279,7 +280,6 @@ interface DestinationItem {
       const body = (await response.json()) as {
         data: DetailPostResponse; // Adjust type for post
       };
-  console.log(body.data)
       const responsePost = body.data.post;
   
       const post: PostDetailItem = {
@@ -311,11 +311,92 @@ interface DestinationItem {
       return null;
     }
   };
-  
+
+const getDestinationById = async (
+  id: string
+): Promise<DestinationItem | null> => {
+  try {
+    const response = await fetch(baseUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer VpZOSCUF9PH7lt8WkqhzarXmMxpDeo4ofISiZL-_1Kw`,
+      },
+      body: JSON.stringify({
+        query: gqlTravelDestinationByIdQuery,
+        variables: { destinationId: id },
+      }),
+    });
+
+    const body = (await response.json()) as { data: DetailDestinationResponse };
+
+    const responseDestination = body.data.destination;
+
+    const destination: DestinationItem = {
+      sys: { id: responseDestination.sys.id },
+      title: responseDestination.title,
+      description: responseDestination.description,
+      photo: responseDestination.photo,
+      departureDate: responseDestination.departureDate,
+      returnDate: responseDestination.returnDate,
+      price: responseDestination.price,
+      category: responseDestination.category,
+    };
+
+    return destination;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+const getDestinationsByCategory = async (
+  category: string
+): Promise<DestinationListItem[]> => {
+  try {
+    const response = await fetch(baseUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer VpZOSCUF9PH7lt8WkqhzarXmMxpDeo4ofISiZL-_1Kw`,
+      },
+      body: JSON.stringify({
+        query: gqlDestinationsByCategoryQuery,
+        variables: { category },
+      }),
+    });
+
+    const body = (await response.json()) as {
+      data: travelDestinationCollectionResponse;
+    };
+
+    console.log(body);
+
+    const destinations: DestinationListItem[] = body.data.travelDestinationCollection.items.map(
+      (item) => ({
+        id: item.sys.id,
+        title: item.title,
+        description: item.description,
+        photo: item.photo,
+        departureDate: item.departureDate,
+        returnDate: item.returnDate,
+        price: item.price,
+        category: item.category,
+      })
+    );
+
+    return destinations;
+  } catch (error) {
+    return [];
+  }
+};
+
 
   const contentfulService = {
     getAllPosts,
-    getPostById
+    getPostById,
+    getDestinationById,
+    getDestinationsByCategory
   };
   
   export default contentfulService;
