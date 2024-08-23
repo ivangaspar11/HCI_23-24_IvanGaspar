@@ -64,20 +64,23 @@ export type SearchParams = {
 const Blog: FC<SearchParams> = async ({}) => {
   const posts = await contentfulService.getAllPosts();
 
+  
   return (
     <div>
       <Header />
-      <div className="container flex flex-col items-center gap-10 py-10">
-        <ul className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {posts.map((post) => (
-            <li key={post.id}>
-              <PostCard {...post} />
-            </li>
-          ))}
-        </ul>
-      </div>
+      <div className="container mx-auto gap-10 py-10">
+  <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 justify-center">
+    {posts.map((post) => (
+      <li key={post.id} className="flex justify-center">
+        <PostCard {...post} />
+      </li>
+    ))}
+  </ul>
+</div>
     </div>
   );
+  
 };
+
 
 export default Blog;

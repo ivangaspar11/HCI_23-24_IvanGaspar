@@ -9,9 +9,9 @@ const HeroSection = () => {
           <div className='p-5 text-white z-[2] mt-[-10rem]'>
             <h2 className='text-5xl font-bold'>Explore, Dream, and Discover with ITA</h2>
             <p className='py-5 text-xl'>Where Your Ideal Escape Begins!</p>
-            <button className='px-8 py-2 border'>
-        Explore
-      </button>
+            <a href="#destinations" className='px-8 py-2 border bg-transparent text-white rounded'>
+          Explore
+        </a>
           </div>
         </div>
       );

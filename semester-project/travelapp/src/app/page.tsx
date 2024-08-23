@@ -32,7 +32,7 @@ const popularDestinations = [
 
 const companyNumbersData = {
   locations: 2000,
-  kilometers: 50000,
+  kilometers: 5000000,
   countries: 20,
 };
 
@@ -46,7 +46,6 @@ export default function Home() {
       <DestinationsSection destinations={popularDestinations}/>
       <NumberSection companyNumbers={companyNumbersData} />
       <AboutUsSection/>
-
     </div>
   );
 }

@@ -109,8 +109,8 @@ const gqlDestinationsByCategoryQuery = `query GetDestinationsByCategory($categor
 }`;
 
   
-const gqlTravelDestinationByIdQuery = `query GetTravelDestionationById($travelId: String!) {
-  travelDestination(id: $travelId) {
+const gqlTravelDestinationByIdQuery = `query GetTravelDestionationById($destinationId: String!) {
+  travelDestination(id: $destinationId) {
     sys {
       id
     }
@@ -216,7 +216,7 @@ interface DestinationItem {
 }
 
 interface DetailDestinationResponse {
-  destination: DestinationItem;
+  travelDestination: DestinationItem;
 }
   const baseUrl = `https://graphql.contentful.com/content/v1/spaces/zqhs6d43ltbb/environments/master`;
 
@@ -312,85 +312,85 @@ interface DetailDestinationResponse {
     }
   };
 
-const getDestinationById = async (
-  id: string
-): Promise<DestinationItem | null> => {
-  try {
-    const response = await fetch(baseUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer VpZOSCUF9PH7lt8WkqhzarXmMxpDeo4ofISiZL-_1Kw`,
-      },
-      body: JSON.stringify({
-        query: gqlTravelDestinationByIdQuery,
-        variables: { destinationId: id },
-      }),
-    });
-
-    const body = (await response.json()) as { data: DetailDestinationResponse };
-
-    const responseDestination = body.data.destination;
-
-    const destination: DestinationItem = {
-      sys: { id: responseDestination.sys.id },
-      title: responseDestination.title,
-      description: responseDestination.description,
-      photo: responseDestination.photo,
-      departureDate: responseDestination.departureDate,
-      returnDate: responseDestination.returnDate,
-      price: responseDestination.price,
-      category: responseDestination.category,
-    };
-
-    return destination;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
-
-const getDestinationsByCategory = async (
-  category: string
-): Promise<DestinationListItem[]> => {
-  try {
-    const response = await fetch(baseUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer VpZOSCUF9PH7lt8WkqhzarXmMxpDeo4ofISiZL-_1Kw`,
-      },
-      body: JSON.stringify({
-        query: gqlDestinationsByCategoryQuery,
-        variables: { category },
-      }),
-    });
-
-    const body = (await response.json()) as {
-      data: travelDestinationCollectionResponse;
-    };
-
-    console.log(body);
-
-    const destinations: DestinationListItem[] = body.data.travelDestinationCollection.items.map(
-      (item) => ({
-        id: item.sys.id,
-        title: item.title,
-        description: item.description,
-        photo: item.photo,
-        departureDate: item.departureDate,
-        returnDate: item.returnDate,
-        price: item.price,
-        category: item.category,
-      })
-    );
-
-    return destinations;
-  } catch (error) {
-    return [];
-  }
-};
-
+  const getDestinationById = async (
+    id: string
+  ): Promise<DestinationListItem | null> => {
+    try {
+      const response = await fetch(baseUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer VpZOSCUF9PH7lt8WkqhzarXmMxpDeo4ofISiZL-_1Kw`,
+        },
+        body: JSON.stringify({
+          query: gqlTravelDestinationByIdQuery,
+          variables: { destinationId: id },
+        }),
+      });
+  
+      const body = (await response.json()) as { data: DetailDestinationResponse };
+      const responseDestination = body.data.travelDestination;
+  
+      const destination: DestinationListItem = {
+       id:responseDestination.sys.id,
+       title: responseDestination.title,
+       description: responseDestination.description.json,
+       photo:responseDestination.photo,   
+       departureDate: responseDestination.departureDate,
+       returnDate: responseDestination.returnDate,
+        price: responseDestination.price,
+        category: responseDestination.category,
+      };
+  
+      return destination;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
+  
+  const getDestinationsByCategory = async (
+    category: string
+  ): Promise<DestinationListItem[]> => {
+    try {
+      const response = await fetch(baseUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer VpZOSCUF9PH7lt8WkqhzarXmMxpDeo4ofISiZL-_1Kw`,
+        },
+        body: JSON.stringify({
+          query: gqlDestinationsByCategoryQuery,
+          variables: { category },
+        }),
+      });
+  
+      const body = (await response.json()) as {
+        data: travelDestinationCollectionResponse;
+      };
+  
+  
+      const destinations: DestinationListItem[] = body.data.travelDestinationCollection.items.map(
+        (item) => ({
+          id: item.sys.id,
+          title: item.title,
+          description: item.description.json,
+          photo: {
+            url: item.photo.url,
+          },
+          departureDate: item.departureDate,
+          returnDate: item.returnDate,
+          price: item.price,
+          category: item.category,
+        })
+      );
+  
+      return destinations;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
 
   const contentfulService = {
     getAllPosts,

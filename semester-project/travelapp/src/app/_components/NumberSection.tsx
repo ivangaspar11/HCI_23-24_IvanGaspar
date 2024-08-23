@@ -1,5 +1,3 @@
-// CompanyNumbersSection.tsx
-
 import React from 'react';
 import { FaMapMarkerAlt, FaPlane, FaPassport } from 'react-icons/fa';
 
@@ -14,37 +12,37 @@ type CompanyNumbersSectionProps = {
 };
 
 const CompanyNumbersSection: React.FC<CompanyNumbersSectionProps> = ({ companyNumbers }) => {
-    return (
-      <section className="py-16 bg-gray-100">
-        <div className="container mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-8 md:mb-12">Our Company in Numbers</h2>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8">
-            <div className="flex items-center mb-8 md:mb-0">
-              <FaMapMarkerAlt className="text-3xl md:text-4xl mr-4" />
-              <div>
-                <p className="text-gray-600 text-lg mb-2 md:mb-4">Locations</p>
-                <p className="text-4xl font-bold">{companyNumbers.locations}</p>
-              </div>
-            </div>
-            <div className="flex items-center mb-8 md:mb-0">
-              <FaPlane className="text-3xl md:text-4xl mr-4" />
-              <div>
-                <p className="text-gray-600 text-lg mb-2 md:mb-4">Kilometers</p>
-                <p className="text-4xl font-bold">{companyNumbers.kilometers}</p>
-              </div>
-            </div>
-            <div className="flex items-center">
-              <FaPassport className="text-3xl md:text-4xl mr-4" />
-              <div>
-                <p className="text-gray-600 text-lg mb-2 md:mb-4">Countries</p>
-                <p className="text-4xl font-bold">{companyNumbers.countries}</p>
-              </div>
-            </div>
+  return (
+    <section className="py-16 bg-gradient-to-r from-indigo-50 to-blue-50">
+      <div className="container mx-auto text-center">
+        <h2 className="text-4xl font-extrabold text-gray-800 mb-8 md:mb-12">Our Company in Numbers</h2>
+        <div className="flex flex-col md:flex-row items-center justify-around gap-8">
+          
+          {/* Locations */}
+          <div className="flex flex-col items-center">
+            <FaMapMarkerAlt className="text-5xl md:text-6xl text-indigo-600 mb-4 md:mb-6 hover:text-indigo-800 transition-colors duration-300" />
+            <p className="text-xl md:text-2xl font-medium text-gray-700">Locations</p>
+            <p className="text-5xl md:text-6xl font-extrabold text-indigo-800">{companyNumbers.locations}</p>
           </div>
+
+          {/* Kilometers */}
+          <div className="flex flex-col items-center">
+            <FaPlane className="text-5xl md:text-6xl text-green-600 mb-4 md:mb-6 hover:text-green-800 transition-colors duration-300" />
+            <p className="text-xl md:text-2xl font-medium text-gray-700">Kilometers</p>
+            <p className="text-5xl md:text-6xl font-extrabold text-green-800">{companyNumbers.kilometers}</p>
+          </div>
+
+          {/* Countries */}
+          <div className="flex flex-col items-center">
+            <FaPassport className="text-5xl md:text-6xl text-blue-600 mb-4 md:mb-6 hover:text-blue-800 transition-colors duration-300" />
+            <p className="text-xl md:text-2xl font-medium text-gray-700">Countries</p>
+            <p className="text-5xl md:text-6xl font-extrabold text-blue-800">{companyNumbers.countries}</p>
+          </div>
+          
         </div>
-      </section>
-    );
-  
+      </div>
+    </section>
+  );
 };
 
 export default CompanyNumbersSection;

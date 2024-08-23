@@ -46,7 +46,7 @@ const MainNav = ({ pages }: { pages: Page[] }) => {
             height={300}  // Set your preferred height
           /> */}
         </Link>
-        <ul style={{ color: `${textColor}` }} className='hidden sm:flex'>
+        <ul style={{ color: `${textColor}` }} className='hidden cs:flex'>
           {pages.map(({ href, title }) => (
             <li className={cn("p-4", {"border-b-4 border-blue-500":pathname === href, "inline-block": true})} key={href}>
               <Link href={href}>
@@ -64,7 +64,7 @@ const MainNav = ({ pages }: { pages: Page[] }) => {
         </ul>
 
         {/* Mobile Button */}
-        <div onClick={handleNav} className='block sm:hidden z-10'>
+        <div onClick={handleNav} className='block cs:hidden z-10'>
           {nav ? (
             <AiOutlineClose size={20} style={{ color: `${textColor}` }} />
           ) : (
@@ -76,8 +76,8 @@ const MainNav = ({ pages }: { pages: Page[] }) => {
         <div
           className={
             nav
-              ? 'sm:hidden absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center w-full h-screen bg-black text-center ease-in duration-300'
-              : 'sm:hidden absolute top-0 left-[-100%] right-0 bottom-0 flex justify-center items-center w-full h-screen bg-black text-center ease-in duration-300'
+              ? 'cs:hidden absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center w-full h-screen bg-black text-center ease-in duration-300'
+              : 'cs:hidden absolute top-0 left-[-100%] right-0 bottom-0 flex justify-center items-center w-full h-screen bg-black text-center ease-in duration-300'
           }>
           <ul>
             {pages.map(({ href, title }) => (
@@ -85,7 +85,7 @@ const MainNav = ({ pages }: { pages: Page[] }) => {
                 <Link href={href}>
                   <span
                     className={cn(
-                      "uppercase whitespace-nowrap font-roboto-condensed text-base px-5 py-3 rounded-sm text-brand-purple-900 hover:bg-brand-purple-200",
+                      "uppercase whitespace-nowrap font-roboto-condensed text-base px-5 py-3 rounded-cs text-brand-purple-900 hover:bg-brand-purple-200",
                       {
                         "inline-block border-b-4 border-blue-500":
                           pathname === href,

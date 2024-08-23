@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import Header from './Header';
 
@@ -6,116 +7,116 @@ import LocalPhoneRoundedIcon from '@mui/icons-material/LocalPhoneRounded';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import ScheduleRoundedIcon from '@mui/icons-material/ScheduleRounded';
 
-
 const ContactPage: React.FC = () => {
-
   return (
-    <div className="container mx-auto my-5 text-center">
-      <Header/>
-      <section className="mb-12 mt-10">
-  <div className="container flex flex-col md:flex-row justify-between">
-
-  <div className="hidden md:block ml-10">
+    <div>
+      <Header />
+      <section className="mb-12 mt-10 " >
+        <div className="container flex flex-col md:flex-row items-center justify-between">
+        <div className="hidden md:block ml-40">
   <img src="/contact-us-1jpg.png" alt="Contact Us" className="max-w-full max-h-2/5" />
-</div>
+</div >
 
-    <div className="text-center md:text-left md:mr-20 md:ml-5 mb-5 md:mb-0 ">
-      <h3 className="mb-8 text-2xl">
-        Feel free to ask us your questions. We will respond to you as soon as possible.
-      </h3>
-      <form
-          // onSubmit={handleSubmit}
-          className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-lg mx-auto"
-        >
-          <div className="mb-1">
-            <label htmlFor="name" className="block text-gray-700">First Name</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              className="w-full border p-2 rounded border-black"
-            />
-          </div>
+          <div className="text-center md:text-left md:ml-auto md:mr-0 mb-5 md:mb-0">
+            <h3 className="mb-8 text-3xl font-semibold text-gray-800">
+              We’re Here to Help!
+            </h3>
+            <p className="text-gray-600 mb-6">Feel free to ask us your questions. We will respond to you as soon as possible.</p>
+            <form
+              className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-lg mx-auto"
+            >
+              <div className="mb-4">
+                <label htmlFor="firstName" className="block text-gray-700 font-medium">First Name</label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  className="w-full border p-3 rounded border-gray-300 focus:outline-none focus:border-blue-500"
+                  placeholder="John"
+                />
+              </div>
 
-          <div className="mb-1">
-            <label htmlFor="surname" className="block text-gray-700">Last Name</label>
-            <input
-              type="text"
-              id="surname"
-              name="surname"
-              className="w-full border p-2 border-black rounded"
-            />
-          </div>
-      
-          <div className="mb-1">
-            <label htmlFor="email" className="block text-gray-700">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              className="w-full border p-2 rounded border-black"
-            />
-          </div>
+              <div className="mb-4">
+                <label htmlFor="lastName" className="block text-gray-700 font-medium">Last Name</label>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  className="w-full border p-3 rounded border-gray-300 focus:outline-none focus:border-blue-500"
+                  placeholder="Doe"
+                />
+              </div>
 
-       
-          <div className="col-span-2 mb-1">
-            <label htmlFor="question" className="block text-gray-700">What Can We Help You With?</label>
-            <textarea
-              id="question"
-              name="question"
-              className="w-full border p-2 rounded border-black"
-            />
-          </div>
+              <div className="mb-4 col-span-2">
+                <label htmlFor="email" className="block text-gray-700 font-medium">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  className="w-full border p-3 rounded border-gray-300 focus:outline-none focus:border-blue-500"
+                  placeholder="you@example.com"
+                />
+              </div>
 
-          <button
-            type="submit"
-            className=" bg-blue-500 text-white p-2 rounded hover:bg-blue-700"
-          >
-            Submit
-          </button>
-        </form>
-    </div>
-  </div>
+              <div className="mb-4 col-span-2">
+                <label htmlFor="question" className="block text-gray-700 font-medium">What Can We Help You With?</label>
+                <textarea
+                  id="question"
+                  name="question"
+                  className="w-full border p-3 rounded border-gray-300 focus:outline-none focus:border-blue-500"
+                  placeholder="Write your message here..."
+                />
+              </div>
+
+              <div className="col-span-2">
+                <button
+                  type="submit"
+                  className="w-full bg-blue-500 text-white p-3 rounded hover:bg-blue-600 transition-colors"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       </section>
 
-      
-      <section className='bg-gray-100'>
-      <h2 className="text-2xl font-bold mb-6 mt-6 inline-block border-b-4 border-blue-500 pb-2">Contact Information</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-        
-        <div className="mb-4">
-          <h3 className="text-xl font-semibold mb-4">
-          <LocationOnRoundedIcon className='mr-3'/>
-            Our Office
-          </h3>
-          <p className="text-gray-700">123 Main Street, Cityville, Country</p>
-        </div>
-        
-        <div className="mb-4">
-          <h3 className="text-xl font-semibold mb-4 ">
-          <ScheduleRoundedIcon className='mr-3'/>
-            Business Hours
-          </h3>
-          <p className="text-gray-700">Monday to Friday: 9 AM - 5 PM</p>
-        </div>
-        
-        <div className="mb-4">
-          <h3 className="text-xl font-semibold mb-4">
-          <LocalPhoneRoundedIcon className='mr-3' />
-            Phone
-          </h3>
-          <p className="text-gray-700">(+123) 456-7890</p>
-        </div>
+      {/* Contact Information Section */}
+      <section className='bg-gray-100 py-12 text-center'>
+        <h2 className="text-3xl font-bold mb-8 text-gray-800">
+          Contact Information
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+          
+          {/* Office Location */}
+          <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md">
+            <LocationOnRoundedIcon className='text-blue-500 mb-4' fontSize='large' />
+            <h3 className="text-xl font-semibold mb-2">Our Office</h3>
+            <p className="text-gray-700">123 Main Street, Cityville, Country</p>
+          </div>
 
-        <div className="mb-4">
-          <h3 className="text-xl font-semibold mb-4">
-          <EmailRoundedIcon className='mr-3'/>
-            Email
-          </h3>
-          <p className="text-gray-700">info@yourtravelapp.com</p>
+          {/* Business Hours */}
+          <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md">
+            <ScheduleRoundedIcon className='text-blue-500 mb-4' fontSize='large' />
+            <h3 className="text-xl font-semibold mb-2">Business Hours</h3>
+            <p className="text-gray-700">Monday to Friday: 9 AM - 5 PM</p>
+          </div>
+
+          {/* Phone */}
+          <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md">
+            <LocalPhoneRoundedIcon className='text-blue-500 mb-4' fontSize='large' />
+            <h3 className="text-xl font-semibold mb-2">Phone</h3>
+            <p className="text-gray-700">(+123) 456-7890</p>
+          </div>
+
+          {/* Email */}
+          <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md">
+            <EmailRoundedIcon className='text-blue-500 mb-4' fontSize='large' />
+            <h3 className="text-xl font-semibold mb-2">Email</h3>
+            <p className="text-gray-700">info@yourtravelapp.com</p>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
     </div>
   );
 };

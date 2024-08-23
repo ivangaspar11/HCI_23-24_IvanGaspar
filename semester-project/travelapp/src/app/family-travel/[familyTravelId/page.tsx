@@ -6,10 +6,9 @@ import contentful from "@/app/lib/contentful";
 import { FC, JSXElementConstructor, PromiseLikeOfReactNode, ReactElement, ReactNode, ReactPortal } from "react";
 import Header from "../Header";
 import { BLOCKS, INLINES } from '@contentful/rich-text-types';
-import Head from "next/head";
 
 type Params = {
-  adventureTravelId: string;
+  familyTravelId: string;
 };
 
 
@@ -46,20 +45,18 @@ const RichTextRenderer = ({ }) => {
   };
 }
 
-const AdventureDestinationsPage: FC<{ params: Params }> = async ({ params }) => {
-  const adventureDestination = await contentful.getDestinationById(params.adventureTravelId);
-  if (!adventureDestination) {
+const FamilyDestinationsPage: FC<{ params: Params }> = async ({ params }) => {
+  const familyDestination = await contentful.getDestinationById(params.familyTravelId);
+  if (!familyDestination) {
     return <div>Post not found</div>;
   }
 
   return (
-    <div>
-      <Header/>
     <main className="container mx-auto p-4 md:p-8 lg:p-16 bg-gray-50">
       <article className="mt-20 md:mt-24 max-w-4xl mx-auto">
         <header className="mb-8 text-center px-4">
           <h1 className="font-roboto-condensed text-3xl md:text-4xl lg:text-5xl font-extrabold text-brand-purple-900 my-2 md:my-4">
-            {adventureDestination.title}
+            {familyDestination.title}
           </h1>  
         </header>
 
@@ -67,14 +64,14 @@ const AdventureDestinationsPage: FC<{ params: Params }> = async ({ params }) => 
           <Image
             fill
             style={{ objectFit: "cover" }}
-            src={adventureDestination.photo.url}
-            alt={adventureDestination.title}
+            src={familyDestination.photo.url}
+            alt={familyDestination.title}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 75vw"
           />
         </div>
 
         <section className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl prose-brand mx-auto text-gray-800 px-4">
-          {documentToReactComponents(adventureDestination.description)}
+          {documentToReactComponents(familyDestination.description)}
         </section>
 
         <footer className="mt-12 border-t pt-8 px-4">
@@ -83,8 +80,7 @@ const AdventureDestinationsPage: FC<{ params: Params }> = async ({ params }) => 
         </footer>
       </article>
     </main>
-    </div>
   );
 };
 
-export default AdventureDestinationsPage;
+export default FamilyDestinationsPage;

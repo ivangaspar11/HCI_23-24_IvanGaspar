@@ -1,5 +1,3 @@
-// Section.tsx
-
 import React from 'react';
 
 type Destination = {
@@ -12,19 +10,27 @@ type SectionProps = {
   destinations: Destination[];
 };
 
-const DestinastionsSection: React.FC<SectionProps> = ({ destinations }) => {
+const DestinationsSection: React.FC<SectionProps> = ({ destinations }) => {
   return (
-    <section className="py-12">
+    <section id="destinations" className="py-16 bg-gray-50">
       <div className="container mx-auto">
-        <h2 className="text-3xl font-bold mb-6 text-center">Popular Destinations</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <h2 className="text-4xl font-extrabold text-gray-800 mb-10 text-center">Popular Destinations</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
           {destinations.map((destination) => (
-            <div key={destination.id} className="mb-8 flex flex-col items-center">
-              <img src={destination.imageUrl} alt={destination.name} className="w-full h-64 object-cover mb-4" />
-              <div className="text-center">
-                <h3 className="text-lg font-semibold mb-2">{destination.name}</h3>
-                <button className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-700"> Book Now</button>
-
+            <div
+              key={destination.id}
+              className="group relative rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105"
+            >
+              <img
+                src={destination.imageUrl}
+                alt={destination.name}
+                className="w-full h-64 object-cover"
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-white">
+                <h3 className="text-2xl font-bold mb-4">{destination.name}</h3>
+                <button className="bg-white text-blue-600 px-6 py-2 rounded-full font-semibold hover:bg-blue-700 hover:text-white transition-all duration-300">
+                  Book Now
+                </button>
               </div>
             </div>
           ))}
@@ -34,4 +40,4 @@ const DestinastionsSection: React.FC<SectionProps> = ({ destinations }) => {
   );
 };
 
-export default DestinastionsSection;
+export default DestinationsSection;
