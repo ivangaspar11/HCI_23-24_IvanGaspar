@@ -163,7 +163,7 @@ const AdventureDestinationsPage: FC<{ params: Params }> = ({ params }) => {
                   <strong>Payment Options:</strong> We accept credit cards, PayPal, and bank transfers.
                 </li>
                 <li>
-                  <strong>What's Included:</strong> Accommodation, meals, guided tours, and transport are included.
+                  <strong>What&apos;s Included:</strong> Accommodation, meals, guided tours, and transport are included.
                 </li>
                 <li>
                   <strong>Cancellation Policy:</strong> Free cancellation up to 14 days before departure.

@@ -146,8 +146,9 @@ const FamilyDestinationsPage: FC = () => {
                 <Slider
                   value={[minDuration, maxDuration]}
                   onChange={(_, newValue) => {
-                    setMinDuration(newValue[0] as number);
-                    setMaxDuration(newValue[1] as number);
+                    const valueArray = newValue as number[];
+                    setMinDuration(valueArray[0]);
+                    setMaxDuration(valueArray[1]);
                   }}
                   valueLabelDisplay="auto"
                   min={0}
@@ -183,8 +184,9 @@ const FamilyDestinationsPage: FC = () => {
                 <Slider
                   value={[minPrice, maxPrice]}
                   onChange={(_, newValue) => {
-                    setMinPrice(newValue[0] as number);
-                    setMaxPrice(newValue[1] as number);
+                    const valueArray = newValue as number[];
+                    setMinPrice(valueArray[0]);
+                    setMaxPrice(valueArray[1]);
                   }}
                   valueLabelDisplay="auto"
                   min={0}
