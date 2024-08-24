@@ -25,12 +25,10 @@ const DestinationsSection: React.FC<SectionProps> = ({ destinations }) => {
                 src={destination.imageUrl}
                 alt={destination.name}
                 className="w-full h-64 object-cover"
+                loading='lazy'
               />
               <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-white">
                 <h3 className="text-2xl font-bold mb-4">{destination.name}</h3>
-                <button className="bg-white text-blue-600 px-6 py-2 rounded-full font-semibold hover:bg-blue-700 hover:text-white transition-all duration-300">
-                  Book Now
-                </button>
               </div>
             </div>
           ))}

@@ -1,65 +1,29 @@
-"use client"; // Enable client-side rendering
+"use client"; // Required for client-side rendering
 
 import Image from "next/image";
-import {
-  documentToReactComponents,
-} from "@contentful/rich-text-react-renderer";
-import { useState, useEffect, FC } from "react";
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import contentful from "@/app/lib/contentful";
+import { FC, useState, useEffect } from "react";
 import Header from "../Header";
-import { BLOCKS, INLINES } from '@contentful/rich-text-types';
+import { BLOCKS, INLINES } from "@contentful/rich-text-types";
 
 type Params = {
-  adventureTravelId: string;
+  familyTravelId: string;
 };
 
-const RichTextRenderer = () => {
-  const options = {
-    renderNode: {
-      [BLOCKS.EMBEDDED_ASSET]: (node: { data: { target: { fields: { file: any; title: any; description: any; }; }; }; }) => {
-        const { file, title, description } = node.data.target.fields;
-        const imageUrl = file.url;
-        return (
-          <img
-            src={imageUrl}
-            alt={description || title}
-            className="my-4 rounded-lg shadow-lg"
-            style={{ maxWidth: '100%', height: 'auto' }}
-          />
-        );
-      },
-      [INLINES.HYPERLINK]: (node: { data: { uri: any; }; }, children: React.ReactNode) => {
-        const { uri } = node.data;
-        return (
-          <a
-            href={uri}
-            className="text-blue-600 hover:underline"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {children}
-          </a>
-        );
-      },
-    },
-  };
-
-  return options;
-};
-
-const AdventureDestinationsPage: FC<{ params: Params }> = ({ params }) => {
-  const [adventureDestination, setAdventureDestination] = useState<any>(null);
+const FamilyDestinationsPage: FC<{ params: Params }> = ({ params }) => {
+  const [familyDestination, setFamilyDestination] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [bookingMessage, setBookingMessage] = useState<string>("");
   const [reservationStatus, setReservationStatus] = useState<string | null>(null);
-
   useEffect(() => {
     const fetchDestination = async () => {
       try {
-        const destination = await contentful.getDestinationById(params.adventureTravelId);
-        setAdventureDestination(destination);
+        const destination = await contentful.getDestinationById(params.familyTravelId);
+        setFamilyDestination(destination);
       } catch (err) {
-        console.error("Failed to fetch adventure destination", err);
+        console.error("Failed to fetch destination", err);
         setError("Failed to load destination.");
       } finally {
         setLoading(false);
@@ -67,12 +31,14 @@ const AdventureDestinationsPage: FC<{ params: Params }> = ({ params }) => {
     };
 
     fetchDestination();
-  }, [params.adventureTravelId]);
+  }, [params.familyTravelId]);
 
-  const handleReservation = (e: React.FormEvent) => {
-    e.preventDefault();
-    // You can add actual reservation logic here
-    setReservationStatus("Reservation successful! Thank you for booking.");
+  const handleBooking = () => {
+    setBookingMessage("Booking was successful!");
+
+    setTimeout(() => {
+      setBookingMessage("");
+    }, 10000);
   };
 
   if (loading) {
@@ -83,34 +49,46 @@ const AdventureDestinationsPage: FC<{ params: Params }> = ({ params }) => {
     return <div>{error}</div>;
   }
 
-  if (!adventureDestination) {
-    return <div>Post not found</div>;
+  if (!familyDestination) {
+    return <div>Destination not found</div>;
   }
+
+  const handleReservation = (e: React.FormEvent) => {
+    e.preventDefault();
+    // You can add actual reservation logic here
+    setReservationStatus("Reservation successful! Thank you for booking.");
+  };
 
   return (
     <div>
-      <Header/>
-      <main className="container mx-auto p-4 md:p-8 lg:p-16 bg-gray-50 grid grid-cols-1 md:grid-cols-3 gap-12">
-        <article className="col-span-2">
+      <Header />
+      <main className="container mx-auto p-4 md:p-8 lg:p-16 bg-gray-50 flex flex-col md:flex-row gap-8">
+        <article className="mt-20 md:mt-24 max-w-4xl mx-auto md:w-2/3">
           <header className="mb-8 text-center px-4">
             <h1 className="font-roboto-condensed text-3xl md:text-4xl lg:text-5xl font-extrabold text-brand-purple-900 my-2 md:my-4">
-              {adventureDestination.title}
-            </h1>  
+              {familyDestination.title}
+            </h1>
           </header>
 
           <div className="w-full h-64 md:h-96 mb-8 relative overflow-hidden rounded-md shadow-md">
             <Image
               fill
               style={{ objectFit: "cover" }}
-              src={adventureDestination.photo.url}
-              alt={adventureDestination.title}
+              src={familyDestination.photo.url}
+              alt={familyDestination.title}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 75vw"
             />
           </div>
 
           <section className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl prose-brand mx-auto text-gray-800 px-4">
-            {documentToReactComponents(adventureDestination.description)}
+            {documentToReactComponents(familyDestination.description)}
           </section>
+
+          <footer className="mt-12 border-t pt-8 px-4">
+            <div className="flex items-center gap-4">
+              {/* Additional footer content can go here */}
+            </div>
+          </footer>
         </article>
 
         {/* Sidebar for Booking and Information */}
@@ -187,4 +165,4 @@ const AdventureDestinationsPage: FC<{ params: Params }> = ({ params }) => {
   );
 };
 
-export default AdventureDestinationsPage;
+export default FamilyDestinationsPage;

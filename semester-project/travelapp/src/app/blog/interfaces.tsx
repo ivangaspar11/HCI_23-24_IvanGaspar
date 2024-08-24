@@ -15,6 +15,7 @@ interface Image {
   // Represents the detailed structure of a single post item
   interface PostDetailItem {
     id: string;
+    publishedAt:Date;
     title: string;
     slug: string;
     excerpt: string;
@@ -28,6 +29,12 @@ interface Image {
   // Represents the response structure returned by the GraphQL query
   interface DetailPostResponse {
     post: {
+      id:string;
+      sys:{
+        id:string;
+        publishedAt:Date;
+      }
+      publishedAt:Date;
       title: string;
       slug: string;
       excerpt: string;

@@ -34,6 +34,7 @@ const gqlAllPostsQuery = `query PostList {
     post(id: $postId) {
       sys {
         id
+        publishedAt
       }
       title
       slug
@@ -179,6 +180,7 @@ interface DestinationItem {
   interface PostItem{
     sys:{
         id:string;
+        publishedAt:Date;
     };
     title: string;
     slug: string;
@@ -227,6 +229,8 @@ interface DetailDestinationResponse {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer VpZOSCUF9PH7lt8WkqhzarXmMxpDeo4ofISiZL-_1Kw`,
+          "Cache-Control": "no-cache", // Prevent caching
+        "Pragma": "no-cache", // For HTTP/1.0 compatibility
         },
         body: JSON.stringify({ query: gqlAllPostsQuery }),
       });
@@ -241,17 +245,16 @@ interface DetailDestinationResponse {
       const posts: TypePostListItem[] =
         body.data.postCollection.items.map((item) => ({
           id: item.sys.id,
+          publishedAt:item.sys.publishedAt,
           title: item.title,
           content: item.content,
           coverImage:item.coverImage.url,
           slug: item.slug,
           author:item.author,
           excerpt:item.excerpt,
+       
         }));
-      
-      console.log({
-        posts
-      })
+    
 
       return posts;
     } catch (error) {
@@ -270,6 +273,8 @@ interface DetailDestinationResponse {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer VpZOSCUF9PH7lt8WkqhzarXmMxpDeo4ofISiZL-_1Kw`,
+          "Cache-Control": "no-cache", // Prevent caching
+        "Pragma": "no-cache", // For HTTP/1.0 compatibility
         },
         body: JSON.stringify({
           query: gqlPostByIdQuery,  // Use the post query here
@@ -281,9 +286,9 @@ interface DetailDestinationResponse {
         data: DetailPostResponse; // Adjust type for post
       };
       const responsePost = body.data.post;
-  
       const post: PostDetailItem = {
-        id: id,
+        id: responsePost.sys.id,
+        publishedAt:responsePost.sys.publishedAt,
         title: responsePost.title,
         slug: responsePost.slug,
         excerpt: responsePost.excerpt,
@@ -304,7 +309,7 @@ interface DetailDestinationResponse {
           },
         },
       };
-      
+      console.log(post)
       return post;
     } catch (error) {
       console.log(error);
@@ -321,6 +326,8 @@ interface DetailDestinationResponse {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer VpZOSCUF9PH7lt8WkqhzarXmMxpDeo4ofISiZL-_1Kw`,
+          "Cache-Control": "no-cache", // Prevent caching
+          "Pragma": "no-cache", // For HTTP/1.0 compatibility
         },
         body: JSON.stringify({
           query: gqlTravelDestinationByIdQuery,
@@ -358,6 +365,8 @@ interface DetailDestinationResponse {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer VpZOSCUF9PH7lt8WkqhzarXmMxpDeo4ofISiZL-_1Kw`,
+          "Cache-Control": "no-cache", // Prevent caching
+          "Pragma": "no-cache", // For HTTP/1.0 compatibility
         },
         body: JSON.stringify({
           query: gqlDestinationsByCategoryQuery,
@@ -368,7 +377,7 @@ interface DetailDestinationResponse {
       const body = (await response.json()) as {
         data: travelDestinationCollectionResponse;
       };
-  
+
   
       const destinations: DestinationListItem[] = body.data.travelDestinationCollection.items.map(
         (item) => ({

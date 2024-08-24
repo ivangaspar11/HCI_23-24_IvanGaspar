@@ -1,6 +1,6 @@
 "use client"; // Required for client-side rendering
 
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import Image from "next/image";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import contentful from "@/app/lib/contentful";
@@ -11,8 +11,37 @@ type Params = {
   blogId: string;
 };
 
-const PostPage: FC<{ params: Params }> = async ({ params }) => {
-  const post = await contentful.getPostById(params.blogId);
+const PostPage: FC<{ params: Params }> = ({ params }) => {
+  const [post, setPost] = useState<{
+    title: string;
+    excerpt: string;
+    coverImage: { url: string };
+    content: any;
+    author: { picture: { url: string }; name: string };
+    publishedAt: Date; // Add updatedAt to state
+  } | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    // Fetch post data when component mounts
+    const fetchPost = async () => {
+      try {
+        const fetchedPost = await contentful.getPostById(params.blogId);
+        setPost(fetchedPost);
+      } catch (error) {
+        console.error("Failed to fetch post", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPost();
+  }, [params.blogId]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   if (!post) {
     return <div>Post not found</div>;
   }
@@ -58,6 +87,9 @@ const PostPage: FC<{ params: Params }> = async ({ params }) => {
                 <p className="text-sm md:text-lg font-bold text-brand-purple-900">
                   {post.author.name}
                 </p>
+                <p className="text-xs md:text-sm text-gray-500">
+                  Last updated: {new Date(post.publishedAt).toLocaleDateString()} {/* Format date */}
+                </p>
               </div>
             </div>
           </footer>
@@ -74,7 +106,6 @@ const InteractiveFeatures = () => {
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState<{ id: number, text: string }[]>([]);
   const [nextId, setNextId] = useState(1);
-
 
   const handleLike = () => setLiked(!liked);
 
@@ -95,8 +126,8 @@ const InteractiveFeatures = () => {
     }
   };
 
-   // Handle Comment Delete
-   const handleCommentDelete = (id: number) => {
+  // Handle Comment Delete
+  const handleCommentDelete = (id: number) => {
     setComments(comments.filter(comment => comment.id !== id));
   };
 
@@ -121,7 +152,7 @@ const InteractiveFeatures = () => {
       {/* Rating Stars */}
       <div className="flex items-center space-x-2 mb-4">
         {[1, 2, 3, 4, 5].map((star) => (
-          <div key={star} className="relative"  onClick={() => handleRatingClick(star)}>
+          <div key={star} className="relative" onClick={() => handleRatingClick(star)}>
             {star <= rating ? (
               <FaStar className="w-6 h-6 text-yellow-500" aria-hidden="true" />
             ) : rating >= star - 0.5 ? (
@@ -167,7 +198,7 @@ const InteractiveFeatures = () => {
           </div>
         ))}
       </div>
-      </div>
+    </div>
   );
 };
 

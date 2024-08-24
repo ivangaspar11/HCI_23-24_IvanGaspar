@@ -1,6 +1,9 @@
-import { FC } from "react";
+"use client"; // Required for client-side rendering
+
+import { FC, useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import Slider from "@mui/material/Slider";
 import { Card, CardContent, CardFooter, CardHeader } from "@/app/components/UI/card";
 import contentfulService, { DestinationListItem } from "@/app/lib/contentful";
 import Header from "./Header";
@@ -8,8 +11,7 @@ import Header from "./Header";
 function formatDate(dateString: string) {
   const date = new Date(dateString);
   const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
-  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
   return `${day}.${month}`;
 }
 
@@ -25,7 +27,7 @@ const FamilyDestinationCard: FC<DestinationListItem> = ({
     <Link href={`family-travel/${id}`} passHref>
       <div className="block">
         <CardHeader className="p-4 text-center bg-gray-100">
-          <p className="text-sm font-large text-gray-600">
+          <p className="text-xl font-large text-black-600">
             {`${formatDate(departureDate)} - ${formatDate(returnDate)}`}
           </p>
         </CardHeader>
@@ -46,8 +48,8 @@ const FamilyDestinationCard: FC<DestinationListItem> = ({
           </div>
         </CardContent>
         <CardFooter className="p-4 flex justify-center">
-          <button className="bg-brand-purple-800 text-black py-2 px-4 rounded-md hover:bg-brand-purple-900 transition">
-            VIŠE INFORMACIJA
+          <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-brand-blue-900 transition duration-300">
+            SEE DETAILS
           </button>
         </CardFooter>
       </div>
@@ -55,9 +57,6 @@ const FamilyDestinationCard: FC<DestinationListItem> = ({
   </Card>
 );
 
-export type SearchParams = {
-  searchParams: Record<string, string | string[] | undefined>;
-};
 const NoTravelIcon = () => (
   <svg
     className="w-16 h-16 mx-auto"
@@ -82,34 +81,161 @@ const NoTravelIcon = () => (
     />
   </svg>
 );
-const FamilyDestinationsPage: FC<SearchParams> = async ({}) => {
-const familyDestinations = await contentfulService.getDestinationsByCategory("Family");
 
-  if(familyDestinations.length ===0){
-    return (
-      <div>
-         <Header/>
-      <div className="flex justify-center items-center min-h-screen bg-gray-100 p-6">
-        <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md text-center">
-          <NoTravelIcon />
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">No Planned Tours</h2>
-          <p className="text-gray-600">It looks like there are no family destinations planned at the moment. Please check back later or explore other options.</p>
-        </div>
-      </div>
-      </div>
-    );
-};
+const FamilyDestinationsPage: FC = () => {
+  const [familyDestinations, setFamilyDestinations] = useState<DestinationListItem[]>([]);
+  const [filteredDestinations, setFilteredDestinations] = useState<DestinationListItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  
+  // Filter state variables
+  const [minPrice, setMinPrice] = useState<number>(0);
+  const [maxPrice, setMaxPrice] = useState<number>(5000);
+  const [minDuration, setMinDuration] = useState<number>(0);
+  const [maxDuration, setMaxDuration] = useState<number>(30);
+
+  useEffect(() => {
+    const fetchDestinations = async () => {
+      try {
+        const destinations = await contentfulService.getDestinationsByCategory("Family");
+        setFamilyDestinations(destinations);
+        setFilteredDestinations(destinations); // Initialize filtered destinations
+      } catch (err) {
+        console.error("Failed to fetch family destinations", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDestinations();
+  }, []);
+
+  useEffect(() => {
+    // Filter destinations whenever filter values change
+    const filterDestinations = () => {
+      const filtered = familyDestinations.filter(destination => {
+        const departure = new Date(destination.departureDate);
+        const returnDate = new Date(destination.returnDate);
+        const duration = (returnDate.getTime() - departure.getTime()) / (1000 * 3600 * 24);
+        const isInPriceRange = destination.price >= minPrice && destination.price <= maxPrice;
+        const isInDurationRange = duration >= minDuration && duration <= maxDuration;
+
+        return isInPriceRange && isInDurationRange;
+      });
+      setFilteredDestinations(filtered);
+    };
+
+    filterDestinations();
+  }, [minPrice, maxPrice, minDuration, maxDuration, familyDestinations]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
-      <Header/>
-      <div className="container flex flex-col items-center gap-10 py-10">
-        <ul className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {familyDestinations.map((familyDestination) => (
-            <li key={familyDestination.id}>
-              <FamilyDestinationCard {...familyDestination} />
-            </li>
-          ))}
-        </ul>
+      <Header />
+      <div className="container mx-auto py-10">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-800 mb-4 md:mb-0">Filter Destinations</h2>
+          <div className="flex flex-col md:flex-row gap-6 items-start w-full md:w-auto">
+            {/* Filters */}
+            <div className="flex flex-col gap-6">
+              {/* Duration Slider */}
+              <div>
+                <label className="block text-gray-700 font-medium mb-2">Trip Duration (Days)</label>
+                <Slider
+                  value={[minDuration, maxDuration]}
+                  onChange={(_, newValue) => {
+                    setMinDuration(newValue[0] as number);
+                    setMaxDuration(newValue[1] as number);
+                  }}
+                  valueLabelDisplay="auto"
+                  min={0}
+                  max={30}
+                  step={1}
+                  marks
+                  sx={{
+                    width: 300,
+                    color: '#3f51b5',
+                    height: 6,
+                    '& .MuiSlider-thumb': {
+                      width: 24,
+                      height: 24,
+                      borderRadius: '50%',
+                      backgroundColor: '#3f51b5',
+                      border: '2px solid #fff',
+                      '&:hover': {
+                        boxShadow: '0px 0px 0px 8px rgba(63, 81, 181, 0.16)',
+                      },
+                    },
+                    '& .MuiSlider-rail': {
+                      opacity: 0.28,
+                    },
+                    '& .MuiSlider-track': {
+                      border: 'none',
+                    },
+                  }}
+                />
+              </div>
+              {/* Price Slider */}
+              <div>
+                <label className="block text-gray-700 font-medium mb-2">Price Range (Euros)</label>
+                <Slider
+                  value={[minPrice, maxPrice]}
+                  onChange={(_, newValue) => {
+                    setMinPrice(newValue[0] as number);
+                    setMaxPrice(newValue[1] as number);
+                  }}
+                  valueLabelDisplay="auto"
+                  min={0}
+                  max={5000}
+                  step={10}
+                  marks
+                  sx={{
+                    width: 300,
+                    color: '#3f51b5',
+                    height: 6,
+                    '& .MuiSlider-thumb': {
+                      width: 24,
+                      height: 24,
+                      borderRadius: '50%',
+                      backgroundColor: '#3f51b5',
+                      border: '2px solid #fff',
+                      '&:hover': {
+                        boxShadow: '0px 0px 0px 8px rgba(63, 81, 181, 0.16)',
+                      },
+                    },
+                    '& .MuiSlider-rail': {
+                      opacity: 0.28,
+                    },
+                    '& .MuiSlider-track': {
+                      border: 'none',
+                    },
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          {filteredDestinations.length === 0 ? (
+            <div className="flex justify-center items-center min-h-screen bg-gray-100 p-6">
+              <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md text-center">
+                <NoTravelIcon />
+                <h2 className="text-2xl font-semibold text-gray-800 mb-4">No Planned Tours</h2>
+                <p className="text-gray-600">It looks like there are no family destinations matching your filters. Please adjust your filters or check back later.</p>
+              </div>
+            </div>
+          ) : (
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {filteredDestinations.map((familyDestination) => (
+                <li key={familyDestination.id}>
+                  <FamilyDestinationCard {...familyDestination} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </div>
   );
