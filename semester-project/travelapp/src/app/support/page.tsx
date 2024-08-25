@@ -24,7 +24,7 @@ const FAQSection = () => {
   ];
 
   return (
-    <Container maxWidth="md" sx={{ py: 6 }}>
+    <Container maxWidth="md" id="QaA" sx={{ py: 6 }}>
       <Typography variant="h4" component="h2" align="center" gutterBottom sx={{ fontWeight: 'bold', mb: 4 }}>
         Frequently Asked Questions
       </Typography>
@@ -108,7 +108,7 @@ const GuidesSection = () => (
             <CardContent sx={{ padding: 0 }}>
               <Typography variant="h6" gutterBottom>Booking Your First Trip</Typography>
               <Typography paragraph>Step-by-step guide to making your first booking with us. Learn how to choose the perfect destination, secure your dates, and complete your booking.</Typography>
-              <Link href="#" variant="body2" sx={{ color: 'primary.main' }}>Read More</Link>
+              <Link href="#QaA" variant="body2" sx={{ color: 'primary.main' }}>Read More</Link>
             </CardContent>
           </Card>
         </Grid>
@@ -117,7 +117,7 @@ const GuidesSection = () => (
             <CardContent sx={{ padding: 0 }}>
               <Typography variant="h6" gutterBottom>Understanding Our Insurance Policies</Typography>
               <Typography paragraph>Everything you need to know about our travel insurance options. From trip cancellation to health coverage, find the right plan for your needs.</Typography>
-              <Link href="#" variant="body2" sx={{ color: 'primary.main' }}>Read More</Link>
+              <Link href="#insuranceInfo" variant="body2" sx={{ color: 'primary.main' }}>Read More</Link>
             </CardContent>
           </Card>
         </Grid>
@@ -159,6 +159,40 @@ const TestimonialsSection = () => (
   </Box>
 );
 
+const PrivacyPolicySection = () => (
+  <Box component="section" id="privacy-policy" sx={{ py: 12, backgroundColor: '#ffffff' }}>
+    <Container maxWidth="md">
+      <Typography variant="h4" component="h2" gutterBottom sx={{ fontWeight: 'bold', mb: 6, textAlign: 'center' }}>
+        Privacy Policy
+      </Typography>
+      <Grid container spacing={4} alignItems="center">
+        <Grid item xs={12} md={6}>
+          <Card sx={{ boxShadow: 'none', backgroundColor: 'transparent' }}>
+            <CardContent sx={{ padding: 0 }}>
+              <Typography paragraph>
+                We are committed to protecting your privacy. This Privacy Policy outlines how we collect, use, and safeguard your personal information when you use our services.
+              </Typography>
+              <Typography paragraph>
+                We collect information you provide directly to us, such as when you create an account, make a booking, or contact customer support. This information may include your name, email address, payment information, and any other details you provide.
+              </Typography>
+              <Typography paragraph>
+                We use this information to process your bookings, provide customer support, and improve our services. We may also use your information to send you promotional materials, but you can opt-out at any time.
+              </Typography>
+              <Typography paragraph>
+                We implement industry-standard security measures to protect your data. However, no system is completely secure, and we cannot guarantee the absolute security of your information.
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Box sx={{ textAlign: 'center' }}>
+            <img src="/data-protection_10837184.png" alt="Privacy Illustration" style={{ maxWidth: '100%', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }} />
+          </Box>
+        </Grid>
+      </Grid>
+    </Container>
+  </Box>
+);
 
 const SupportPage: React.FC = () => {
   return (
@@ -173,7 +207,7 @@ const SupportPage: React.FC = () => {
 
       <TestimonialsSection />
 
-      <Box component="section" sx={{ py: 12, backgroundColor: '#f7f7f7' }}>
+      <Box component="section" id="terms-conditions" sx={{ py: 12, backgroundColor: '#f7f7f7' }}>
         <Container maxWidth="md">
           <Typography variant="h4" component="h2" gutterBottom sx={{ fontWeight: 'bold', mb: 6, textAlign: 'center' }}>
             Terms & Conditions
@@ -203,35 +237,39 @@ const SupportPage: React.FC = () => {
         </Container>
       </Box>
 
-      <Box component="section" sx={{ py: 12, backgroundColor: '#ffffff' }}>
-        <Container maxWidth="md">
-          <Typography variant="h4" component="h2" gutterBottom sx={{ fontWeight: 'bold', mb: 6, textAlign: 'center' }}>
-            Insurance Information
-          </Typography>
-          <Grid container spacing={4} alignItems="center">
-            <Grid item xs={12} md={6} order={{ xs: 2, md: 1 }}>
-              <Card sx={{ boxShadow: 'none', backgroundColor: 'transparent' }}>
-                <CardContent sx={{ padding: 0 }}>
-                  <Typography paragraph>
-                    We recommend and offer a comprehensive travel insurance package to all our passengers for coverage against accidents and illnesses, luggage loss, voluntary health insurance during travel, trip cancellation, and assistance in case of accidents.
-                  </Typography>
-                  <Typography paragraph>
-                    The insurance contract is concluded before the start of the journey, no later than the day preceding the day of travel. Trip cancellation insurance must be arranged when signing the travel contract or purchasing a non-refundable airline ticket.
-                  </Typography>
-                  <Typography paragraph>
-                    Note: If you arrange the insurance contract independently, the conditions and deadlines may vary among insurance companies.
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} md={6} order={{ xs: 1, md: 2 }}>
-              <Box sx={{ textAlign: 'center' }}>
-                <img src="/insurance2.png" alt="Insurance Illustration" style={{ maxWidth: '100%', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }} />
-              </Box>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
+      <Box component="section" id="insuranceInfo" sx={{ py: 12, backgroundColor: '#ffffff' }}>
+  <Container maxWidth="md">
+    <Typography variant="h4" component="h2" gutterBottom sx={{ fontWeight: 'bold', mb: 6, textAlign: 'center' }}>
+      Insurance Information
+    </Typography>
+    <Grid container spacing={4} alignItems="center">
+      {/* Image on the left */}
+      <Grid item xs={12} md={6} order={{ xs: 1, md: 1 }}>
+        <Box sx={{ textAlign: 'center' }}>
+          <img src="/insurance2.png" alt="Insurance Illustration" style={{ maxWidth: '100%', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }} />
+        </Box>
+      </Grid>
+      
+      {/* Text on the right */}
+      <Grid item xs={12} md={6} order={{ xs: 2, md: 2 }}>
+        <Card sx={{ boxShadow: 'none', backgroundColor: 'transparent' }}>
+          <CardContent sx={{ padding: 0 }}>
+            <Typography paragraph>
+              We recommend and offer a comprehensive travel insurance package to all our passengers for coverage against accidents and illnesses, luggage loss, voluntary health insurance during travel, trip cancellation, and assistance in case of accidents.
+            </Typography>
+            <Typography paragraph>
+              The insurance contract is concluded before the start of the journey, no later than the day preceding the day of travel. Trip cancellation insurance must be arranged when signing the travel contract or purchasing a non-refundable airline ticket.
+            </Typography>
+            <Typography paragraph>
+              Note: If you arrange the insurance contract independently, the conditions and deadlines may vary among insurance companies.
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+  </Container>
+</Box>
+      <PrivacyPolicySection/>
     </div>
   );
 };

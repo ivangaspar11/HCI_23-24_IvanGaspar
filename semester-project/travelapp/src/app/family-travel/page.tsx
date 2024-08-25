@@ -3,10 +3,11 @@
 import { FC, useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Slider from "@mui/material/Slider";
 import { Card, CardContent, CardFooter, CardHeader } from "@/app/components/UI/card";
 import contentfulService, { DestinationListItem } from "@/app/lib/contentful";
 import Header from "./Header";
+import Typography from "@mui/material/Typography";
+import FilterSidebar from "../_components/FilterSidebar";
 
 function formatDate(dateString: string) {
   const date = new Date(dateString);
@@ -130,113 +131,49 @@ const FamilyDestinationsPage: FC = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
       <Header />
       <div className="container mx-auto py-10">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4 md:mb-0">Filter Destinations</h2>
-          <div className="flex flex-col md:flex-row gap-6 items-start w-full md:w-auto">
-            {/* Filters */}
-            <div className="flex flex-col gap-6">
-              {/* Duration Slider */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-2">Trip Duration (Days)</label>
-                <Slider
-                  value={[minDuration, maxDuration]}
-                  onChange={(_, newValue) => {
-                    const valueArray = newValue as number[];
-                    setMinDuration(valueArray[0]);
-                    setMaxDuration(valueArray[1]);
-                  }}
-                  valueLabelDisplay="auto"
-                  min={0}
-                  max={30}
-                  step={1}
-                  marks
-                  sx={{
-                    width: 300,
-                    color: '#3f51b5',
-                    height: 6,
-                    '& .MuiSlider-thumb': {
-                      width: 24,
-                      height: 24,
-                      borderRadius: '50%',
-                      backgroundColor: '#3f51b5',
-                      border: '2px solid #fff',
-                      '&:hover': {
-                        boxShadow: '0px 0px 0px 8px rgba(63, 81, 181, 0.16)',
-                      },
-                    },
-                    '& .MuiSlider-rail': {
-                      opacity: 0.28,
-                    },
-                    '& .MuiSlider-track': {
-                      border: 'none',
-                    },
-                  }}
-                />
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Destinations List */}
+          <div className="md:col-span-3">
+            {filteredDestinations.length === 0 ? (
+              <div className="flex justify-center items-center min-h-screen bg-gray-100 p-6">
+                <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md text-center">
+                  <NoTravelIcon />
+                  <h2 className="text-2xl font-semibold text-gray-800 mb-4">No Planned Tours</h2>
+                  <p className="text-gray-600">It looks like there are no family destinations matching your filters. Please adjust your filters or check back later.</p>
+                </div>
               </div>
-              {/* Price Slider */}
-              <div>
-                <label className="block text-gray-700 font-medium mb-2">Price Range (Euros)</label>
-                <Slider
-                  value={[minPrice, maxPrice]}
-                  onChange={(_, newValue) => {
-                    const valueArray = newValue as number[];
-                    setMinPrice(valueArray[0]);
-                    setMaxPrice(valueArray[1]);
-                  }}
-                  valueLabelDisplay="auto"
-                  min={0}
-                  max={5000}
-                  step={10}
-                  marks
-                  sx={{
-                    width: 300,
-                    color: '#3f51b5',
-                    height: 6,
-                    '& .MuiSlider-thumb': {
-                      width: 24,
-                      height: 24,
-                      borderRadius: '50%',
-                      backgroundColor: '#3f51b5',
-                      border: '2px solid #fff',
-                      '&:hover': {
-                        boxShadow: '0px 0px 0px 8px rgba(63, 81, 181, 0.16)',
-                      },
-                    },
-                    '& .MuiSlider-rail': {
-                      opacity: 0.28,
-                    },
-                    '& .MuiSlider-track': {
-                      border: 'none',
-                    },
-                  }}
-                />
-              </div>
-            </div>
+            ) : (
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {filteredDestinations.map((familyDestination) => (
+                  <li key={familyDestination.id}>
+                    <FamilyDestinationCard {...familyDestination} />
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-        </div>
-        <div>
-          {filteredDestinations.length === 0 ? (
-            <div className="flex justify-center items-center min-h-screen bg-gray-100 p-6">
-              <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md text-center">
-                <NoTravelIcon />
-                <h2 className="text-2xl font-semibold text-gray-800 mb-4">No Planned Tours</h2>
-                <p className="text-gray-600">It looks like there are no family destinations matching your filters. Please adjust your filters or check back later.</p>
-              </div>
-            </div>
-          ) : (
-            <ul className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {filteredDestinations.map((familyDestination) => (
-                <li key={familyDestination.id}>
-                  <FamilyDestinationCard {...familyDestination} />
-                </li>
-              ))}
-            </ul>
-          )}
+        <FilterSidebar
+            tripDuration={[minDuration, maxDuration]}
+            priceRange={[minPrice, maxPrice]}
+            handleTripDurationChange={(_, newValue) => {
+              const valueArray = newValue as number[];
+              setMinDuration(valueArray[0]);
+              setMaxDuration(valueArray[1]);
+            }}
+            handlePriceRangeChange={(_, newValue) => {
+              const valueArray = newValue as number[];
+              setMinPrice(valueArray[0]);
+              setMaxPrice(valueArray[1]);
+            }}
+          />
         </div>
       </div>
     </div>

@@ -89,7 +89,12 @@ const AdventureDestinationsPage: FC<{ params: Params }> = ({ params }) => {
 
   return (
     <div>
-      <Header/>
+      <header>
+      <div className="relative h-[60vh] mb-0 bg-center bg-cover adventure-img" >
+        <h1 className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-3xl font-bold text-white">
+        </h1>
+        </div>
+      </header>
       <main className="container mx-auto p-4 md:p-8 lg:p-16 bg-gray-50 grid grid-cols-1 md:grid-cols-3 gap-12">
         <article className="col-span-2">
           <header className="mb-8 text-center px-4">
