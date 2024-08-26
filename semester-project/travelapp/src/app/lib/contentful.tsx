@@ -1,34 +1,28 @@
 
-const gqlAllPostsQuery = `query PostList {
-    postCollection{
-        items{
-          sys {
-            id
-          }
-             title
-          slug
-          excerpt
-          coverImage
-          {
-            url
-              width
-                 height
-              description
-          }
-          content{json}
-          author
-          {
-            name
-            picture
-            {
-              url
-                height
-                width
+const gqlAllPostsQuery = `query GetPosts($limit: Int!, $skip: Int!) {
+          postCollection(limit: $limit, skip: $skip) {
+            items {
+              sys {
+                id
+                publishedAt
+              }
+              title
+              content{json}
+              coverImage {
+                url
+              }
+              slug
+              author {
+                name
+                picture {
+                  url
+                }
+              }
+              excerpt
             }
-          }     
+          }
         }
-    }
-  }`;
+      `;
 
   const gqlPostByIdQuery = `query GetPostById($postId: String!) {
     post(id: $postId) {
@@ -59,30 +53,13 @@ const gqlAllPostsQuery = `query PostList {
     }
   }`;
 
-  const gqlAdventureTravelQuery = ` query GetAdventureTravelDestinations {
-  travelDestinationCollection(where: { category: "Adventure" }) {
-    items {
-      sys {
-        id
-      }
-      title
-      description {
-        json
-      }
-      photo {
-        url
-        title
-        description
-        width
-        height
-      }
-      departureDate
-      returnDate
-      price
-      category
-    }
-  }
-} `;
+ const GetTotalNumberOfPostquery =` query TotalNumberOfPosts{
+          postCollection {
+            total
+          }
+        }
+      `;
+
 
 const gqlDestinationsByCategoryQuery = `query GetDestinationsByCategory($category: String!) {
   travelDestinationCollection(where: { category: $category }) {
@@ -222,7 +199,7 @@ interface DetailDestinationResponse {
 }
   const baseUrl = `https://graphql.contentful.com/content/v1/spaces/zqhs6d43ltbb/environments/master`;
 
-  const getAllPosts = async (): Promise<TypePostListItem[]> => {
+  const getAllPosts = async (limit: number, skip: number): Promise<TypePostListItem[]> => {
     try {
       const response = await fetch(baseUrl, {
         method: "POST",
@@ -230,39 +207,63 @@ interface DetailDestinationResponse {
           "Content-Type": "application/json",
           Authorization: `Bearer VpZOSCUF9PH7lt8WkqhzarXmMxpDeo4ofISiZL-_1Kw`,
           "Cache-Control": "no-cache", // Prevent caching
-        "Pragma": "no-cache", // For HTTP/1.0 compatibility
+          "Pragma": "no-cache", // For HTTP/1.0 compatibility
         },
-        body: JSON.stringify({ query: gqlAllPostsQuery }),
+        body: JSON.stringify({
+          query:gqlAllPostsQuery,
+          variables: {
+            limit,
+            skip,
+          },
+        }),
       });
   
-      // Get the response as JSON, cast as PostCollectionResponse
+      // Get the response as JSON
       const body = (await response.json()) as {
-        data: PostCollectionResponse;
+        data: {
+          postCollection: {
+            items: Array<{
+              sys: {
+                id: string;
+                publishedAt: string;
+              };
+              title: string;
+              content: string;
+              coverImage: {
+                url: string;
+              };
+              slug: string;
+              author: {
+                name: string;
+                picture: {
+                  url: string;
+                };
+              };
+              excerpt: string;
+            }>;
+          };
+        };
       };
-
   
       // Map the response to the format we want
-      const posts: TypePostListItem[] =
-        body.data.postCollection.items.map((item) => ({
-          id: item.sys.id,
-          publishedAt:item.sys.publishedAt,
-          title: item.title,
-          content: item.content,
-          coverImage:item.coverImage.url,
-          slug: item.slug,
-          author:item.author,
-          excerpt:item.excerpt,
-       
-        }));
-    
-
+      const posts: TypePostListItem[] = body.data.postCollection.items.map((item) => ({
+        id: item.sys.id,
+        publishedAt: item.sys.publishedAt,
+        title: item.title,
+        content: item.content,
+        coverImage: item.coverImage.url,
+        slug: item.slug,
+        author: item.author,
+        excerpt: item.excerpt,
+      }));
+  
       return posts;
     } catch (error) {
       console.log(error);
-  
       return [];
     }
   };
+  
 
   const getPostById = async (
     id: string
@@ -316,6 +317,36 @@ interface DetailDestinationResponse {
       return null;
     }
   };
+
+ // contentfulService.ts
+
+export const getTotalPostCount = async (): Promise<number> => {
+  try {
+    const response = await fetch(baseUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer VpZOSCUF9PH7lt8WkqhzarXmMxpDeo4ofISiZL-_1Kw`,
+        "Cache-Control": "no-cache",
+        "Pragma": "no-cache",
+      },
+      body: JSON.stringify({ query: GetTotalNumberOfPostquery }),
+    });
+
+    const body = (await response.json()) as {
+      data: {
+        postCollection: {
+          total: number;
+        };
+      };
+    };
+
+    return body.data.postCollection.total;
+  } catch (error) {
+    console.error(error);
+    return 0; // Handle errors appropriately
+  }
+};
 
   const getDestinationById = async (
     id: string
@@ -405,7 +436,8 @@ interface DetailDestinationResponse {
     getAllPosts,
     getPostById,
     getDestinationById,
-    getDestinationsByCategory
+    getDestinationsByCategory,
+    getTotalPostCount
   };
   
   export default contentfulService;

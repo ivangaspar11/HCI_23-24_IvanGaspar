@@ -83,16 +83,22 @@ const PostCard: FC<TypePostListItem> = ({
   </Card>
 );
 
-const Blog: FC = () => {
+const PostList: FC<{ page: number; setPage: (page: number) => void }> = ({ page, setPage }) => {
   const [posts, setPosts] = useState<TypePostListItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const postsPerPage = 6;
 
   useEffect(() => {
-    // Fetch posts on component mount
-    const fetchPosts = async () => {
+    const fetchPosts = async (page: number) => {
+      const skip = (page - 1) * postsPerPage;
       try {
-        const fetchedPosts = await contentfulService.getAllPosts();
+        const fetchedPosts = await contentfulService.getAllPosts(postsPerPage, skip);
         setPosts(fetchedPosts);
+
+        // Fetch total post count and calculate total pages
+        const totalPostCount = await contentfulService.getTotalPostCount();
+        setTotalPages(Math.ceil(totalPostCount / postsPerPage));
       } catch (error) {
         console.error("Failed to fetch posts", error);
       } finally {
@@ -100,24 +106,60 @@ const Blog: FC = () => {
       }
     };
 
-    fetchPosts();
-  }, []); // Empty dependency array ensures this runs once on mount
+    setLoading(true);
+    fetchPosts(page);
+  }, [page]);
+
+  const handleNextPage = () => {
+    if (page < totalPages) setPage(page + 1);
+  };
+
+  const handlePrevPage = () => {
+    if (page > 1) setPage(page - 1);
+  };
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
+    <>
+      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 justify-center">
+        {posts.map((post) => (
+          <li key={post.id} className="flex justify-center">
+            <PostCard {...post} />
+          </li>
+        ))}
+      </ul>
+      <div className="flex justify-between mt-8">
+        <button 
+          onClick={handlePrevPage}
+          disabled={page === 1}
+          className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md"
+        >
+          Previous
+        </button>
+        <span className="self-center">Page {page} of {totalPages}</span>
+        <button 
+          onClick={handleNextPage}
+          disabled={page === totalPages}
+          className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md"
+        >
+          Next
+        </button>
+      </div>
+    </>
+  );
+};
+
+const Blog: FC = () => {
+  const [page, setPage] = useState<number>(1);
+
+  return (
     <div>
       <Header />
       <div className="container mx-auto gap-10 py-10">
-        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 justify-center">
-          {posts.map((post) => (
-            <li key={post.id} className="flex justify-center">
-              <PostCard {...post} />
-            </li>
-          ))}
-        </ul>
+        <PostList page={page} setPage={setPage} />
       </div>
     </div>
   );
