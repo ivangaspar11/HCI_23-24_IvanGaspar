@@ -180,9 +180,9 @@ const AdventureDestinationsPage: FC<{ params: Params }> = ({ params }) => {
             <section>
               <h2 className="text-xl font-semibold text-brand-purple-900 mb-4">Additional Resources</h2>
               <ul className="space-y-2 text-gray-700">
-                <li><a href="#" className="text-blue-600 hover:underline">Frequently Asked Questions</a></li>
-                <li><a href="#" className="text-blue-600 hover:underline">Travel Guide</a></li>
-                <li><a href="#" className="text-blue-600 hover:underline">Contact Us</a></li>
+                <li><a href="/support#QaA" className="text-blue-600 hover:underline">Frequently Asked Questions</a></li>
+                <li><a href="/support#QaA" className="text-blue-600 hover:underline">Travel Guide</a></li>
+                <li><a href="/contact" className="text-blue-600 hover:underline">Contact Us</a></li>
               </ul>
             </section>
           </div>

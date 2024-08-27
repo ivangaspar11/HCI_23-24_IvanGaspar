@@ -24,6 +24,12 @@ const gqlAllPostsQuery = `query GetPosts($limit: Int!, $skip: Int!) {
         }
       `;
 
+const GetTotalDestinationsCountQuery = `query GetTotalDestinationsCount($category: String!) {
+  travelDestinationCollection(where: { category: $category }) {
+    total
+  }
+}`;      
+
   const gqlPostByIdQuery = `query GetPostById($postId: String!) {
     post(id: $postId) {
       sys {
@@ -60,31 +66,32 @@ const gqlAllPostsQuery = `query GetPosts($limit: Int!, $skip: Int!) {
         }
       `;
 
-
-const gqlDestinationsByCategoryQuery = `query GetDestinationsByCategory($category: String!) {
-  travelDestinationCollection(where: { category: $category }) {
-    items {
-      sys {
-        id
-      }
-      title
-      description {
-        json
-      }
-      photo {
-        url
-        title
-        description
-        width
-        height
-      }
-      departureDate
-      returnDate
-      price
-      category
-    }
-  }
-}`;
+      const gqlDestinationsByCategoryQuery = `query GetDestinationsByCategory($category: String!, $limit: Int, $skip: Int) {
+        travelDestinationCollection(where: { category: $category }, limit: $limit, skip: $skip) {
+          total
+          items {
+            sys {
+              id
+            }
+            title
+            description {
+              json
+            }
+            photo {
+              url
+              title
+              description
+              width
+              height
+            }
+            departureDate
+            returnDate
+            price
+            category
+          }
+        }
+      }`;
+      
 
   
 const gqlTravelDestinationByIdQuery = `query GetTravelDestionationById($destinationId: String!) {
@@ -388,7 +395,7 @@ export const getTotalPostCount = async (): Promise<number> => {
   };
   
   const getDestinationsByCategory = async (
-    category: string
+    category: string, limit:number, skip:number
   ): Promise<DestinationListItem[]> => {
     try {
       const response = await fetch(baseUrl, {
@@ -401,7 +408,7 @@ export const getTotalPostCount = async (): Promise<number> => {
         },
         body: JSON.stringify({
           query: gqlDestinationsByCategoryQuery,
-          variables: { category },
+          variables: { category, limit, skip },
         }),
       });
   
@@ -431,13 +438,44 @@ export const getTotalPostCount = async (): Promise<number> => {
       return [];
     }
   };
-
+  export const getTotalDestinationsCount = async (category: string): Promise<number> => {
+    try {
+      const response = await fetch(baseUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer VpZOSCUF9PH7lt8WkqhzarXmMxpDeo4ofISiZL-_1Kw`,
+          "Cache-Control": "no-cache",
+          "Pragma": "no-cache",
+        },
+        body: JSON.stringify({
+          query: GetTotalDestinationsCountQuery,
+          variables: { category },
+        }),
+      });
+  
+      const body = (await response.json()) as {
+        data: {
+          travelDestinationCollection: {
+            total: number;
+          };
+        };
+      };
+  
+      return body.data.travelDestinationCollection.total;
+    } catch (error) {
+      console.error("Failed to fetch total destinations count", error);
+      return 0; // Handle errors appropriately
+    }
+  };
+  
   const contentfulService = {
     getAllPosts,
     getPostById,
     getDestinationById,
     getDestinationsByCategory,
-    getTotalPostCount
+    getTotalPostCount,
+    getTotalDestinationsCount
   };
   
   export default contentfulService;

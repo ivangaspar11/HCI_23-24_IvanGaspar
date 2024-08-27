@@ -6,7 +6,6 @@ import Image from "next/image";
 import { Card, CardContent, CardFooter, CardHeader } from "@/app/components/UI/card";
 import contentfulService, { DestinationListItem } from "@/app/lib/contentful";
 import Header from "./Header";
-import Typography from "@mui/material/Typography";
 import FilterSidebar from "../_components/FilterSidebar";
 
 function formatDate(dateString: string) {
@@ -87,7 +86,10 @@ const FamilyDestinationsPage: FC = () => {
   const [familyDestinations, setFamilyDestinations] = useState<DestinationListItem[]>([]);
   const [filteredDestinations, setFilteredDestinations] = useState<DestinationListItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const itemsPerPage = 4;
+
   // Filter state variables
   const [minPrice, setMinPrice] = useState<number>(0);
   const [maxPrice, setMaxPrice] = useState<number>(5000);
@@ -95,20 +97,25 @@ const FamilyDestinationsPage: FC = () => {
   const [maxDuration, setMaxDuration] = useState<number>(30);
 
   useEffect(() => {
-    const fetchDestinations = async () => {
+    const fetchDestinations = async (page: number) => {
+      const skip = (page - 1) * itemsPerPage;
       try {
-        const destinations = await contentfulService.getDestinationsByCategory("Family");
+        const destinations = await contentfulService.getDestinationsByCategory("Family", itemsPerPage, skip);
         setFamilyDestinations(destinations);
         setFilteredDestinations(destinations); // Initialize filtered destinations
-      } catch (err) {
-        console.error("Failed to fetch family destinations", err);
+
+        const totalDestinationsCount = await contentfulService.getTotalDestinationsCount("Family");
+        setTotalPages(Math.ceil(totalDestinationsCount / itemsPerPage));
+      } catch (error) {
+        console.error("Failed to fetch destinations", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDestinations();
-  }, []);
+    setLoading(true);
+    fetchDestinations(page);
+  }, [page]);
 
   useEffect(() => {
     // Filter destinations whenever filter values change
@@ -128,9 +135,14 @@ const FamilyDestinationsPage: FC = () => {
     filterDestinations();
   }, [minPrice, maxPrice, minDuration, maxDuration, familyDestinations]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const handleNextPage = () => {
+    if (page < totalPages) setPage(page + 1);
+  };
+
+  const handlePrevPage = () => {
+    if (page > 1) setPage(page - 1);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -140,8 +152,24 @@ const FamilyDestinationsPage: FC = () => {
       <Header />
       <div className="container mx-auto py-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Destinations List */}
-          <div className="md:col-span-3">
+          <div className="md:col-span-1 order-1 md:order-2">
+            <FilterSidebar
+              tripDuration={[minDuration, maxDuration]}
+              priceRange={[minPrice, maxPrice]}
+              handleTripDurationChange={(_, newValue) => {
+                const valueArray = newValue as number[];
+                setMinDuration(valueArray[0]);
+                setMaxDuration(valueArray[1]);
+              }}
+              handlePriceRangeChange={(_, newValue) => {
+                const valueArray = newValue as number[];
+                setMinPrice(valueArray[0]);
+                setMaxPrice(valueArray[1]);
+              }}
+            />
+          </div>
+
+          <div className="md:col-span-3 order-2 md:order-1">
             {filteredDestinations.length === 0 ? (
               <div className="flex justify-center items-center min-h-screen bg-gray-100 p-6">
                 <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md text-center">
@@ -151,29 +179,36 @@ const FamilyDestinationsPage: FC = () => {
                 </div>
               </div>
             ) : (
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {filteredDestinations.map((familyDestination) => (
-                  <li key={familyDestination.id}>
-                    <FamilyDestinationCard {...familyDestination} />
-                  </li>
-                ))}
-              </ul>
+              <>
+                <ul className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-8">
+                  {filteredDestinations.map((familyDestination) => (
+                    <li key={familyDestination.id}>
+                      <FamilyDestinationCard {...familyDestination} />
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Pagination Controls */}
+                <div className="flex justify-between mt-8">
+                  <button
+                    onClick={handlePrevPage}
+                    disabled={page === 1}
+                    className={`bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors duration-300 ${page === 1 ? "opacity-50 cursor-not-allowed" : ""}`}
+                  >
+                    Previous
+                  </button>
+                  <span className="text-lg text-gray-700">{`Page ${page} of ${totalPages}`}</span>
+                  <button
+                    onClick={handleNextPage}
+                    disabled={page == totalPages}
+                    className={`bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors duration-300 ${page === totalPages ? "opacity-50 cursor-not-allowed" : ""}`}
+                  >
+                    Next
+                  </button>
+                </div>
+              </>
             )}
           </div>
-        <FilterSidebar
-            tripDuration={[minDuration, maxDuration]}
-            priceRange={[minPrice, maxPrice]}
-            handleTripDurationChange={(_, newValue) => {
-              const valueArray = newValue as number[];
-              setMinDuration(valueArray[0]);
-              setMaxDuration(valueArray[1]);
-            }}
-            handlePriceRangeChange={(_, newValue) => {
-              const valueArray = newValue as number[];
-              setMinPrice(valueArray[0]);
-              setMaxPrice(valueArray[1]);
-            }}
-          />
         </div>
       </div>
     </div>
