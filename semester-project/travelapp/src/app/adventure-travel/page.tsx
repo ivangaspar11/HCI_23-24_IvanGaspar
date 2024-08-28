@@ -48,7 +48,7 @@ const AdventureDestinationCard: FC<DestinationListItem> = ({
           </div>
         </CardContent>
         <CardFooter className="p-4 flex justify-center">
-          <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-brand-blue-900 transition duration-300">
+          <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-900 transition duration-300">
             SEE DETAILS
           </button>
         </CardFooter>

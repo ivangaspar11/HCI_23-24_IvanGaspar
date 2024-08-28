@@ -6,6 +6,7 @@ import contentful from "@/app/lib/contentful";
 import { FC, useState, useEffect } from "react";
 import Header from "../Header";
 import { BLOCKS, INLINES } from "@contentful/rich-text-types";
+import { FaUsers, FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 
 type Params = {
   familyTravelId: string;
@@ -17,6 +18,8 @@ const FamilyDestinationsPage: FC<{ params: Params }> = ({ params }) => {
   const [error, setError] = useState<string | null>(null);
   const [bookingMessage, setBookingMessage] = useState<string>("");
   const [reservationStatus, setReservationStatus] = useState<string | null>(null);
+  const [numPersons, setNumPersons] = useState(1); 
+
   useEffect(() => {
     const fetchDestination = async () => {
       try {
@@ -34,12 +37,24 @@ const FamilyDestinationsPage: FC<{ params: Params }> = ({ params }) => {
   }, [params.familyTravelId]);
 
   const handleBooking = () => {
-    setBookingMessage("Booking was successful!");
+    setBookingMessage("Reservation successful! Thank you for booking.");
 
     setTimeout(() => {
       setBookingMessage("");
     }, 10000);
   };
+
+  const incrementPersons = () => {
+    setNumPersons((prev) => prev + 1);
+  };
+
+  // Function to decrement the number of persons
+  const decrementPersons = () => {
+    if (numPersons > 1) {
+      setNumPersons((prev) => prev - 1);
+    }
+  };
+
 
   if (loading) {
     return <div>Loading...</div>;
@@ -97,7 +112,7 @@ const FamilyDestinationsPage: FC<{ params: Params }> = ({ params }) => {
             {/* Booking Section */}
             <section className="mb-8">
               <h2 className="text-xl font-semibold text-brand-purple-900 mb-4">Make a Reservation</h2>
-              <form className="flex flex-col gap-4" onSubmit={handleReservation}>
+              <form className="flex flex-col gap-4" onSubmit={handleBooking}>
                 <input 
                   type="text" 
                   placeholder="Full Name" 
@@ -116,6 +131,28 @@ const FamilyDestinationsPage: FC<{ params: Params }> = ({ params }) => {
                   className="p-3 border rounded-md"
                   required
                 />
+
+                  {/* Number of Persons Selector */}
+            <div className="flex items-center gap-2">
+              <FaUsers className="text-gray-600" />
+              <span className="font-semibold">Number of Persons</span>
+              <button
+                type="button"
+                onClick={decrementPersons}
+                className="text-blue-500"
+              >
+                <FaMinusCircle size={24} />
+              </button>
+              <span className="px-4 py-2 border rounded-md">{numPersons}</span>
+              <button
+                type="button"
+                onClick={incrementPersons}
+                className="text-blue-500"
+              >
+                <FaPlusCircle size={24} />
+              </button>
+            </div>
+
                 <button 
                   type="submit" 
                   className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-800 transition duration-300"

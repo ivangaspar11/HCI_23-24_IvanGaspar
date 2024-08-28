@@ -8,6 +8,7 @@ import { useState, useEffect, FC } from "react";
 import contentful from "@/app/lib/contentful";
 import Header from "../Header";
 import { BLOCKS, INLINES } from '@contentful/rich-text-types';
+import { FaMinusCircle, FaPlusCircle, FaUsers } from "react-icons/fa";
 
 type Params = {
   adventureTravelId: string;
@@ -52,6 +53,8 @@ const AdventureDestinationsPage: FC<{ params: Params }> = ({ params }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [reservationStatus, setReservationStatus] = useState<string | null>(null);
+  const [numPersons, setNumPersons] = useState(1); 
+  
 
   useEffect(() => {
     const fetchDestination = async () => {
@@ -73,6 +76,17 @@ const AdventureDestinationsPage: FC<{ params: Params }> = ({ params }) => {
     e.preventDefault();
     // You can add actual reservation logic here
     setReservationStatus("Reservation successful! Thank you for booking.");
+  };
+
+  const incrementPersons = () => {
+    setNumPersons((prev) => prev + 1);
+  };
+
+  // Function to decrement the number of persons
+  const decrementPersons = () => {
+    if (numPersons > 1) {
+      setNumPersons((prev) => prev - 1);
+    }
   };
 
   if (loading) {
@@ -123,39 +137,63 @@ const AdventureDestinationsPage: FC<{ params: Params }> = ({ params }) => {
           <div className="sticky top-24">
             {/* Booking Section */}
             <section className="mb-8">
-              <h2 className="text-xl font-semibold text-brand-purple-900 mb-4">Make a Reservation</h2>
-              <form className="flex flex-col gap-4" onSubmit={handleReservation}>
-                <input 
-                  type="text" 
-                  placeholder="Full Name" 
-                  className="p-3 border rounded-md"
-                  required
-                />
-                <input 
-                  type="email" 
-                  placeholder="Email Address" 
-                  className="p-3 border rounded-md"
-                  required
-                />
-                <input 
-                  type="tel" 
-                  placeholder="Phone Number" 
-                  className="p-3 border rounded-md"
-                  required
-                />
-                <button 
-                  type="submit" 
-                  className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-800 transition duration-300"
-                >
-                  Book Now
-                </button>
-              </form>
-              {reservationStatus && (
-                <div className="mt-4 text-green-600 font-semibold">
-                  {reservationStatus}
-                </div>
-              )}
-            </section>
+          <h2 className="text-xl font-semibold text-brand-purple-900 mb-4">
+            Make a Reservation
+          </h2>
+          <form className="flex flex-col gap-4" onSubmit={handleReservation}>
+            <input
+              type="text"
+              placeholder="Full Name"
+              className="p-3 border rounded-md"
+              required
+            />
+            <input
+              type="email"
+              placeholder="Email Address"
+              className="p-3 border rounded-md"
+              required
+            />
+            <input
+              type="tel"
+              placeholder="Phone Number"
+              className="p-3 border rounded-md"
+              required
+            />
+
+            {/* Number of Persons Selector */}
+            <div className="flex items-center gap-2">
+              <FaUsers className="text-gray-600" />
+              <span className="font-semibold">Number of Persons</span>
+              <button
+                type="button"
+                onClick={decrementPersons}
+                className="text-blue-500"
+              >
+                <FaMinusCircle size={24} />
+              </button>
+              <span className="px-4 py-2 border rounded-md">{numPersons}</span>
+              <button
+                type="button"
+                onClick={incrementPersons}
+                className="text-blue-500"
+              >
+                <FaPlusCircle size={24} />
+              </button>
+            </div>
+
+            <button
+              type="submit"
+              className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-800 transition duration-300"
+            >
+              Book Now
+            </button>
+          </form>
+          {reservationStatus && (
+            <div className="mt-4 text-green-600 font-semibold">
+              {reservationStatus}
+            </div>
+          )}
+        </section>
 
             {/* General Information Section */}
             <section className="mb-8">

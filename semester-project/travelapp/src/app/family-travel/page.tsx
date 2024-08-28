@@ -48,7 +48,7 @@ const FamilyDestinationCard: FC<DestinationListItem> = ({
           </div>
         </CardContent>
         <CardFooter className="p-4 flex justify-center">
-          <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-brand-blue-900 transition duration-300">
+          <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-900 transition duration-300">
             SEE DETAILS
           </button>
         </CardFooter>
@@ -180,7 +180,7 @@ const FamilyDestinationsPage: FC = () => {
               </div>
             ) : (
               <>
-                <ul className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-8">
+                <ul className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-8">
                   {filteredDestinations.map((familyDestination) => (
                     <li key={familyDestination.id}>
                       <FamilyDestinationCard {...familyDestination} />
